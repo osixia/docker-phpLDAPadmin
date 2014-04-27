@@ -10,24 +10,23 @@ status () {
 
 set -x
 : LDAP_HOST=${LDAP_HOST}
-: PHPLDAPADMIN_SERVER_NAME=${PHPLDAPADMIN_SERVER_NAME}
 : PHPLDAPADMIN_BASE_DN=${PHPLDAPADMIN_BASE_DN}
 : PHPLDAPADMIN_LOGIN_DN=${PHPLDAPADMIN_LOGIN_DN}
+: PHPLDAPADMIN_SERVER_NAME=${PHPLDAPADMIN_SERVER_NAME}
 
 if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   status "configuring phpLDAPadmin for first run"
 
-# phpLDAPadmin config
+  # phpLDAPadmin config
+  sed -i "s/'127.0.0.1'/'${LDAP_HOST}'/" /etc/phpldapadmin/config.php
+  sed -i "s/'dc=example,dc=com'/'${PHPLDAPADMIN_BASE_DN}'/" /etc/phpldapadmin/config.php
+  sed -i "s/'cn=admin,dc=example,dc=com'/'${PHPLDAPADMIN_LOGIN_DN}'/" /etc/phpldapadmin/config.php
+  sed -i "s/'My LDAP Server'/'${PHPLDAPADMIN_SERVER_NAME}'/" /etc/phpldapadmin/config.php
 
-sed -i "s/'My LDAP Server'/'${PHPLDAPADMIN_SERVER_NAME}'/" /etc/phpldapadmin/config.php
-sed -i "s/'127.0.0.1'/'${PHPLDAPADMIN_BASE_DN}'/" /etc/phpldapadmin/config.php
-sed -i "s/'dc=example,dc=com'/'${PHPLDAPADMIN_BASE_DN}'/" /etc/phpldapadmin/config.php
-sed -i "s/'cn=admin,dc=example,dc=com'/'${PHPLDAPADMIN_LOGIN_DN}'/" /etc/phpldapadmin/config.php
-
-# nginx config
-ln -s /etc/nginx/sites-available/phpLDAPadmin /etc/nginx/sites-enabled/phpLDAPadmin
-rm /etc/nginx/sites-enabled/default
-echo "daemon off;" >> /etc/nginx/nginx.conf
+  # nginx config
+  ln -s /etc/nginx/sites-available/phpLDAPadmin /etc/nginx/sites-enabled/phpLDAPadmin
+  rm /etc/nginx/sites-enabled/default
+  echo "daemon off;" >> /etc/nginx/nginx.conf
 
   touch /etc/phpldapadmin/docker_bootstrapped
 else
