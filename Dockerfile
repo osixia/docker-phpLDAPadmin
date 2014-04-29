@@ -24,6 +24,9 @@ RUN apt-get -y update
 ##### Install phpLDAPadmin, php and nginx #####
 RUN apt-get install -y php5-fpm php5-cli php5-ldap php-apc phpldapadmin nginx
 
+# Expose port 8081 must match port in phpLDAPadmin.nginx
+EXPOSE 8081
+
 # phpLDAPadmin nginx config
 ADD phpLDAPadmin.nginx /etc/nginx/sites-available/phpLDAPadmin
 
@@ -39,6 +42,3 @@ RUN chmod +x /etc/service/phpLDAPadmin/run
 
 # Clear out the local repository of retrieved package files
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Expose port 8081 must match port in phpLDAPadmin.nginx
-EXPOSE 8081
