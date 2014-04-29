@@ -1,6 +1,6 @@
 server {
 	
-	listen 8081;
+	listen 80;
 
         root /usr/share/phpldapadmin/htdocs;
         index index.php index.html;

@@ -3,11 +3,16 @@ MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.fr>
 
 # Default configuration: can be overridden at the docker command line
 ENV LDAP_HOST 127.0.0.1
-ENV PHPLDAPADMIN_BASE_DN dc=example,dc=com
-ENV PHPLDAPADMIN_LOGIN_DN cn=admin,dc=example,dc=com
-ENV PHPLDAPADMIN_SERVER_NAME docker.io phpLDAPadmin
+ENV LDAP_BASE_DN dc=example,dc=com
+ENV LDAP_LOGIN_DN cn=admin,dc=example,dc=com
+ENV LDAP_SERVER_NAME docker.io phpLDAPadmin
 
-# Others environment variables 
+# TLS configs
+# if set to true add to run command -v some/host/dir:/etc/ldap/ssl
+# and the directory some/host/dir must contain the ldap CA certificat file named ca.crt
+ENV LDAP_TLS false
+
+# Set correct environment variables
 ENV HOME /root
 ENV LC_ALL C
 ENV DEBIAN_FRONTEND noninteractive
@@ -21,11 +26,14 @@ CMD ["/sbin/my_init"]
 # Resynchronize the package index files from their sources
 RUN apt-get -y update
 
-##### Install phpLDAPadmin, php and nginx #####
+# Install php, phpLDAPadmin and nginx
 RUN apt-get install -y php5-fpm php5-cli php5-ldap php-apc phpldapadmin nginx
 
-# Expose port 8081 must match port in phpLDAPadmin.nginx
-EXPOSE 8081
+# Expose port 80 must (match port in phpLDAPadmin.nginx)
+EXPOSE 80
+
+# Create TSL certificats directory
+RUN mkdir /etc/ldap/ssl
 
 # phpLDAPadmin nginx config
 ADD phpLDAPadmin.nginx /etc/nginx/sites-available/phpLDAPadmin
