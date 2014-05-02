@@ -15,7 +15,7 @@ set -x
 : LDAP_SERVER_NAME=${LDAP_SERVER_NAME}
 : LDAP_TLS=${LDAP_TLS}
 
-if [ ! -e /etc/LDAP/docker_bootstrapped ]; then
+if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   status "configuring LDAP for first run"
 
   if [ LDAP_TLS ]; then
