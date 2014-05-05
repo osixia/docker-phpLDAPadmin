@@ -1,0 +1,15 @@
+server {
+	
+	listen 80;
+
+        root /usr/share/phpldapadmin/htdocs;
+        index index.php index.html;
+
+        server_name localhost;
+
+        location ~ \.php$ {
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+}
