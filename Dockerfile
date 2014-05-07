@@ -1,4 +1,4 @@
-FROM osixia/baseimage
+FROM phusion/baseimage
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.fr>
 
 # Default configuration: can be overridden at the docker command line
