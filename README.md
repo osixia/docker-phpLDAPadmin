@@ -9,7 +9,7 @@ Run docker image with your custom environment variables :
     docker run -p 80:80 -e LDAP_HOST=ldap.example.com \
                -e PHPLDAPADMIN_BASE_DN=dc=example,dc=com \
                -e PHPLDAPADMIN_LOGIN_DN=cn=admin,dc=example,dc=com \
-               -d osixia/phpLDAPadmin
+               -d osixia/phpldapadmin
 
 phpLDAPadmin should be running on http://localhost
 
@@ -22,6 +22,6 @@ Clone the repository
 
 Build image
 
-    docker build -t phpLDAPadmin .
+    docker build -t phpldapadmin .
 
 to be completed :)
