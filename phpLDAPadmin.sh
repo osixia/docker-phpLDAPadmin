@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # -e Exit immediately if a command exits with a non-zero status
-# -u Treat unset variables as an error when substituting
+# -u Treat unset variables as an error when substituting
 set -eu
 
 status () {
@@ -34,13 +34,8 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   # nginx config
   ln -s /etc/nginx/sites-available/phpLDAPadmin /etc/nginx/sites-enabled/phpLDAPadmin
   rm /etc/nginx/sites-enabled/default
-  echo "daemon off;" >> /etc/nginx/nginx.conf
 
   touch /etc/phpldapadmin/docker_bootstrapped
 else
   status "found already-configured phpLDAPadmin"
 fi
-
-status "starting phpLDAPadmin"
-set -x
-exec service nginx start
