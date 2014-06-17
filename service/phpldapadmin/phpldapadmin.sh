@@ -13,15 +13,16 @@ set -x
 : LDAP_BASE_DN=${LDAP_BASE_DN}
 : LDAP_LOGIN_DN=${LDAP_LOGIN_DN}
 : LDAP_SERVER_NAME=${LDAP_SERVER_NAME}
-: LDAP_TLS=${LDAP_TLS}
 
 if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   status "configuring LDAP for first run"
 
-  if [ LDAP_TLS ]; then
-    # LDAP  config
+  if [ -e /etc/ldap/ssl/ca.crt ]; then
+    # LDAP  CA
     sed -i "s/TLS_CACERT.*/TLS_CACERT       \/etc\/ldap\/ssl\/ca.crt/g" /etc/ldap/ldap.conf
     sed -i '/TLS_CACERT/a\TLS_CIPHER_SUITE        HIGH:MEDIUM:+SSLv3' /etc/ldap/ldap.conf
+    # phpLDAPadmin use tls
+    sed -i "s/.*'server','tls'.*/\$servers->setValue('server','tls',true);/g" /etc/phpldapadmin/config.php
   fi
 
   # phpLDAPadmin config
@@ -29,7 +30,6 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   sed -i "s/'dc=example,dc=com'/'${LDAP_BASE_DN}'/g" /etc/phpldapadmin/config.php
   sed -i "s/'cn=admin,dc=example,dc=com'/'${LDAP_LOGIN_DN}'/g" /etc/phpldapadmin/config.php
   sed -i "s/'My LDAP Server'/'${LDAP_SERVER_NAME}'/g" /etc/phpldapadmin/config.php
-  sed -i "s/.*'server','tls'.*/\$servers->setValue('server','tls',${LDAP_TLS});/g" /etc/phpldapadmin/config.php
 
   # nginx config
   ln -s /etc/nginx/sites-available/phpldapadmin /etc/nginx/sites-enabled/phpldapadmin

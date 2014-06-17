@@ -8,9 +8,8 @@ ENV LDAP_LOGIN_DN cn=admin,dc=example,dc=com
 ENV LDAP_SERVER_NAME docker.io phpLDAPadmin
 
 # TLS configs
-# if set to true add to run command -v some/host/dir:/etc/ldap/ssl
-# and the directory some/host/dir must contain the ldap CA certificat file named ca.crt
-ENV LDAP_TLS false
+# add to run command -v some/host/dir:/etc/ldap/ssl
+# the directory some/host/dir must contain the ldap CA certificat file named ca.crt
 
 # Disable SSH
 # RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
