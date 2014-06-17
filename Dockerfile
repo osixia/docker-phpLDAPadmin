@@ -34,10 +34,10 @@ EXPOSE 80
 RUN mkdir /etc/ldap/ssl
 # phpLDAPadmin config
 RUN mkdir -p /etc/my_init.d
-ADD phpLDAPadmin.sh /etc/my_init.d/phpLDAPadmin.sh
+ADD service/phpldapadmin/phpldapadmin.sh /etc/my_init.d/phpldapadmin.sh
 
 # phpLDAPadmin nginx config
-ADD phpLDAPadmin.nginx /etc/nginx/sites-available/phpLDAPadmin
+ADD service/phpldapadmin/config/phpldapadmin.nginx /etc/nginx/sites-available/phpldapadmin
 
 # Clear out the local repository of retrieved package files
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

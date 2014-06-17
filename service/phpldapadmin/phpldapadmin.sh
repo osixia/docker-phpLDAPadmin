@@ -32,7 +32,7 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   sed -i "s/.*'server','tls'.*/\$servers->setValue('server','tls',${LDAP_TLS});/g" /etc/phpldapadmin/config.php
 
   # nginx config
-  ln -s /etc/nginx/sites-available/phpLDAPadmin /etc/nginx/sites-enabled/phpLDAPadmin
+  ln -s /etc/nginx/sites-available/phpldapadmin /etc/nginx/sites-enabled/phpldapadmin
   rm /etc/nginx/sites-enabled/default
 
   touch /etc/phpldapadmin/docker_bootstrapped
