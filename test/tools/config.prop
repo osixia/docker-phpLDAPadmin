@@ -1,0 +1,3 @@
+testImage=phpldapadmin-test
+testContainer=phpldapadmin-test-container
+testDir=/osixia-test-docker-phpldapadmin
