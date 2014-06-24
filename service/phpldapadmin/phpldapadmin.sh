@@ -27,10 +27,10 @@ getBaseDn () {
 
 # a ldap container is linked to this phpLDAPadmin container
 if [ -n "${LDAP_NAME}" ]; then
-  LDAP_HOST=ldap
+  LDAP_HOST=${LDAP_PORT_389_TCP_ADDR}
   
   # Get base dn from ldap domain
-  getBaseDn LDAP_ENV_LDAP_DOMAIN
+  getBaseDn ${LDAP_ENV_LDAP_DOMAIN}
 
   LDAP_BASE_DN=$baseDn
   LDAP_LOGIN_DN="cn=admin,$baseDn"
