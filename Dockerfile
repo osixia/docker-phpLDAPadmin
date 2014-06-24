@@ -1,4 +1,4 @@
-FROM osixia/baseimage
+FROM osixia/baseimage:0.4.0
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.fr>
 
 # Default configuration: can be overridden at the docker command line
@@ -15,7 +15,7 @@ ENV LDAP_SERVER_NAME docker.io phpLDAPadmin
 # RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Enable php and nginx
-RUN /etc/enable-service php5-fpm nginx
+RUN /sbin/enable-service php5-fpm nginx
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
