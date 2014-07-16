@@ -1,5 +1,5 @@
 NAME = osixia/phpldapadmin
-VERSION = 0.3.0
+VERSION = 0.4.0
 
 .PHONY: all build test tag_latest release
 
@@ -9,7 +9,7 @@ build:
 	docker.io build -t $(NAME):$(VERSION) --rm .
 
 test:
-	env NAME=$(NAME) VERSION=$(VERSION) ./test.sh
+	env NAME=$(NAME) VERSION=$(VERSION) ./test.sh debug
 
 tag_latest:
 	docker.io tag $(NAME):$(VERSION) $(NAME):latest
