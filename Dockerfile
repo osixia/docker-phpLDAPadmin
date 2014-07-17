@@ -1,4 +1,4 @@
-FROM osixia/baseimage:0.5.0
+FROM osixia/baseimage:0.6.0
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.fr>
 
 # Default configuration: can be overridden at the docker command line
@@ -24,7 +24,7 @@ CMD ["/sbin/my_init"]
 RUN apt-get -y update
 
 # Install phpLDAPadmin
-RUN LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y phpldapadmin
+RUN LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends phpldapadmin
 
 # Expose port 80 must (match port in phpLDAPadmin.nginx)
 EXPOSE 80
