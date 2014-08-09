@@ -16,6 +16,18 @@ Run docker image with your custom environment variables :
 
 phpLDAPadmin should be running on http://localhost and https://localhost
 
+### nginx SSL configuration
+
+The details for the self-signed certificate can be defined with the following environment variables:
+
+| Variable         | Default           |
+| ---------------- | ----------------- |
+| SSL_COUNTRY      | XX                |
+| SSL_STATE        | Some-State        |
+| SSL_LOCATION     | Some-Location     |
+| SSL_ORGANIZATION | Some-Organization |
+| SSL_COMMON_NAME  | Some-Common-Name  |
+
 ### Build image from sources
 
 Clone the repository 
