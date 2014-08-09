@@ -12,7 +12,7 @@ Run docker image with your custom environment variables :
                -e LDAP_HOST=ldap.example.com \
                -e LDAP_BASE_DN=dc=example,dc=com \
                -e LDAP_LOGIN_DN=cn=admin,dc=example,dc=com \
-               -d rabejens/phpldapadmin
+               -d windfisch/phpldapadmin
 
 phpLDAPadmin should be running on http://localhost and https://localhost
 
