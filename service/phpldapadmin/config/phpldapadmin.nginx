@@ -1,12 +1,15 @@
 server {
     listen 80 default_server;
     listen [::]:80 default_server ipv6only=on;
+    listen 443 ssl;
 
     root /usr/share/phpldapadmin/htdocs;
     index index.html index.php;
 
     # Make site accessible from http://localhost/
     server_name localhost;
+    ssl_certificate /etc/nginx/ssl/nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx.key;
 
     location / {
         try_files $uri $uri/ /index.php;

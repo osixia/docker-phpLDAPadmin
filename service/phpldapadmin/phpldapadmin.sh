@@ -59,6 +59,9 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   sed -i "s/'cn=admin,dc=example,dc=com'/'${LDAP_LOGIN_DN}'/g" /etc/phpldapadmin/config.php
   sed -i "s/'My LDAP Server'/'${LDAP_SERVER_NAME}'/g" /etc/phpldapadmin/config.php
 
+  # nginx-ssl config
+  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCATION/O=$SSL_ORGANIZATION/CN=$SSL_COMMON_NAME" -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
+
   # nginx config
   ln -s /etc/nginx/sites-available/phpldapadmin /etc/nginx/sites-enabled/phpldapadmin
   rm /etc/nginx/sites-enabled/default
