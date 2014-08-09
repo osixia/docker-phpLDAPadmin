@@ -1,12 +1,12 @@
-NAME = osixia/phpldapadmin
-VERSION = 0.3.1
+NAME = windfisch/phpldapadmin
+VERSION = 0.0.2
 
 .PHONY: all build test tag_latest release
 
 all: build
 
 build:
-	docker.io build -t $(NAME):$(VERSION) --rm .
+	docker build -t $(NAME):$(VERSION) --rm .
 
 test:
 	env NAME=$(NAME) VERSION=$(VERSION) ./test.sh debug
