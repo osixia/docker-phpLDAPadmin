@@ -1,0 +1,1 @@
+docker run --name phpldapadmin-test-container  -d phpldapadmin-test 
