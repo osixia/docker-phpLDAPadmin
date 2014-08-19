@@ -1,6 +1,15 @@
+## This is a normal HTTP host which redirects all traffic to the HTTPS host.
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
+  listen *:80 default_server;
+  server_name localhost;
+  server_tokens off; ## Don't show the nginx version number, a security best practice
+  root /nowhere; ## root doesn't have to be a valid path since we are redirecting
+  rewrite ^ https://$server_name$request_uri permanent;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 default_server ipv6only=on;
     listen 443 ssl;
 
     root /usr/share/phpldapadmin/htdocs;
@@ -8,6 +17,7 @@ server {
 
     # Make site accessible from http://localhost/
     server_name localhost;
+
     ssl_certificate /etc/nginx/ssl/nginx.crt;
     ssl_certificate_key /etc/nginx/ssl/nginx.key;
 
