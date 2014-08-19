@@ -42,10 +42,15 @@ else
   LDAP_SERVER_NAME=${LDAP_SERVER_NAME}
 fi
 
+PHPLDAPADMIN_SSL_CRT_FILENAME=${PHPLDAPADMIN_SSL_CRT_FILENAME}
+PHPLDAPADMIN_SSL_KEY_FILENAME=${PHPLDAPADMIN_SSL_KEY_FILENAME}
+
+LDAP_TLS_CA_NAME=${LDAP_TLS_CA_NAME}
+
 if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   status "configuring LDAP for first run"
 
-  if [ -e /etc/ldap/ssl/ca.crt ]; then
+  if [ -e /etc/ldap/ssl/$LDAP_TLS_CA_NAME ]; then
     # LDAP  CA
     sed -i "s/TLS_CACERT.*/TLS_CACERT       \/etc\/ldap\/ssl\/ca.crt/g" /etc/ldap/ldap.conf
     sed -i '/TLS_CACERT/a\TLS_CIPHER_SUITE        HIGH:MEDIUM:+SSLv3' /etc/ldap/ldap.conf
@@ -63,8 +68,11 @@ if [ ! -e /etc/phpldapadmin/docker_bootstrapped ]; then
   # See http://stackoverflow.com/questions/20673186/getting-error-for-setting-password-feild-when-creating-generic-user-account-phpl
   sed -i "s/'password_hash'/'password_hash_custom'/" /usr/share/phpldapadmin/lib/TemplateRender.php
 
+  # Hide template warnings
+  sed -i "s:// \$config->custom->appearance\['hide_template_warning'\] = false;:\$config->custom->appearance\[\'hide_template_warning\'\] = true;:g" /etc/phpldapadmin/config.php
+
   # nginx config (tools from osixia/baseimage)
-  /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs php ssl
+  /sbin/nginx-add-vhost localhost /usr/share/phpldapadmin/htdocs --php --ssl --ssl-crt=/etc/nginx/ssl/$PHPLDAPADMIN_SSL_CRT_FILENAME --ssl-key=/etc/nginx/ssl/$PHPLDAPADMIN_SSL_KEY_FILENAME
   /sbin/nginx-remove-vhost default
 
   touch /etc/phpldapadmin/docker_bootstrapped
