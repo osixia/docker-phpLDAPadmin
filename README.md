@@ -1,20 +1,36 @@
 # docker-phpLDAPadmin
 
-A version of the [osixia/phpldapadmin][1] image with the following improvements:
+A docker.io image to run phpLDAPadmin
 
-- A [bug on not finding "password_hash" when trying to create a new user][2] is fixed
-- phpLDAPadmin is also exposed via HTTPS on port 443 (using a self-signed certificate)
+## Quick start
 
-### Quick start
-Run docker image with your custom environment variables :
+### Get phpLDAPadmin in 1''
+Run docker container with your custom environment variables :
 
-    docker run -p 80:80 -p 443:443 \
+    sudo docker.io run -p 443:443 \
                -e LDAP_HOST=ldap.example.com \
                -e LDAP_BASE_DN=dc=example,dc=com \
                -e LDAP_LOGIN_DN=cn=admin,dc=example,dc=com \
-               -d windfisch/phpldapadmin
+               -d osixia/phpldapadmin
 
-phpLDAPadmin should be running on http://localhost and https://localhost
+phpLDAPadmin should be running on https://localhost
+
+### Whant more ? Openldap & phpLDAPadmin in 2''
+
+First launch openldap:
+ 
+    sudo docker.io run -p 443:443 \
+               -e LDAP_HOST=ldap.example.com \
+               -e LDAP_BASE_DN=dc=example,dc=com \
+               -e LDAP_LOGIN_DN=cn=admin,dc=example,dc=com \
+               -d osixia/phpldapadmin
+
+    More information : https://github.com/osixia/docker-openldap
+
+Then run phpLDAPadmin image linked to openldap container
+
+Then link openldap container to phpLDAPadmin container:
+
 
 ### nginx SSL configuration
 
