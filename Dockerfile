@@ -1,4 +1,4 @@
-FROM osixia/baseimage:0.8.0
+FROM osixia/baseimage:0.8.1
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.net>
 
 # Default configuration: can be overridden at the docker command line
@@ -7,9 +7,9 @@ ENV LDAP_BASE_DN dc=example,dc=com
 ENV LDAP_LOGIN_DN cn=admin,dc=example,dc=com
 ENV LDAP_SERVER_NAME docker.io phpLDAPadmin
 
-# phpmyadmin SSL certificat and private key filename
-ENV PHPLDAPADMIN_SSL_CRT_FILENAME phpmyadmin.crt
-ENV PHPLDAPADMIN_SSL_KEY_FILENAME phpmyadmin.key
+# phpLDAPadmin SSL certificat and private key filename
+ENV PHPLDAPADMIN_SSL_CRT_FILENAME phpldapadmin.crt
+ENV PHPLDAPADMIN_SSL_KEY_FILENAME phpldapadmin.key
 
 # LDAP CA certificat filename
 ENV LDAP_TLS_CA_NAME ca.crt

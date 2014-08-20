@@ -1,5 +1,5 @@
 NAME = osixia/phpldapadmin
-VERSION = 0.4.0
+VERSION = 0.4.1
 
 .PHONY: all build test tag_latest release
 
