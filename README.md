@@ -1,6 +1,6 @@
 # docker-phpLDAPadmin
 
-A docker.io image to run phpLDAPadmin
+A docker image to run phpLDAPadmin
 
 ## Quick start
 
