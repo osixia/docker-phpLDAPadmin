@@ -18,8 +18,8 @@ rm -rf /var/www/html
 # Delete unnecessary files
 rm -rf /var/www/phpldapadmin/doc
 
-cd /var/www/phpldapadmin
-patch -p1 < /osixia/phpldapadmin/php5.5.patch
+# apply php5.5 patch
+patch -p1 -d /var/www/phpldapadmin < /osixia/phpldapadmin/php5.5.patch
 
-# fix php5-fpm $_SERVER['SCRIPT_NAME'] false value with cgi.fix_pathinfo=0
+# fix php5-fpm $_SERVER['SCRIPT_NAME'] bad value with cgi.fix_pathinfo=0
 sed -i "s/'SCRIPT_NAME'/'PATH_INFO'/g" /var/www/phpldapadmin/lib/common.php
