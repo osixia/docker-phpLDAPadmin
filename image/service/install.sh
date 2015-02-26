@@ -1,7 +1,7 @@
 #!/bin/bash -e
 # this script is run during the image build
 
-# Add phpMyAdmin virtualhosts
+# Add phpLDAPadmin virtualhosts
 ln -s /osixia/phpldapadmin/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
 ln -s /osixia/phpldapadmin/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
 ln -s /osixia/phpldapadmin/config.php /var/www/phpldapadmin/config/config.php
