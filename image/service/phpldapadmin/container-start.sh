@@ -73,6 +73,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     elif [ "${#value_of_value_table[@]}" -gt "1" ]; then
       host_infos_value "$to_print'$key'," "$value"
 
+    # the value contain a not empty variable
+    elif [ -n "${!value}" ]; then
+      local php_value=$(print_by_php_type ${!value})
+      echo "\$servers->setValue($to_print'$key',$php_value);" >> /osixia/phpldapadmin/config.php
+
     # it's just a not empty value
     elif [ -n "$value" ]; then
       local php_value=$(print_by_php_type $value)
