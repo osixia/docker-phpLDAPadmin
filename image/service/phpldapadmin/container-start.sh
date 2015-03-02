@@ -106,11 +106,17 @@ if [ ! -e "$FIRST_START_DONE" ]; then
         echo "\$servers->setValue('server','name','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
         echo "\$servers->setValue('server','host','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
         host_infos "" ${infos[1]}
-
-      # it's just a host name
-      else
+      
+      # it's just a host name 
+      # stored in a variable
+      elif [ -n "${!host}" ]; then
         echo "\$servers->setValue('server','name','${!host}');" >> /var/www/phpldapadmin/config/config.php
         echo "\$servers->setValue('server','host','${!host}');" >> /var/www/phpldapadmin/config/config.php
+      
+      # directly
+      else
+        echo "\$servers->setValue('server','name','${host}');" >> /var/www/phpldapadmin/config/config.php
+        echo "\$servers->setValue('server','host','${host}');" >> /var/www/phpldapadmin/config/config.php
       fi
     done
 
