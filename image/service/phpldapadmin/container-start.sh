@@ -5,12 +5,6 @@ FIRST_START_DONE="/etc/docker-phpldapadmin-first-start-done"
 # container first start
 if [ ! -e "$FIRST_START_DONE" ]; then
 
-  # phpLDAPadmin directory is empty, we use the bootstrap
-  if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
-    cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
-    rm -rf /var/www/phpldapadmin_bootstrap
-  fi
-
   # create phpLDAPadmin vhost
   if [ "${HTTPS,,}" == "true" ]; then
 
@@ -28,98 +22,105 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     a2ensite phpldapadmin
   fi
 
-  get_salt() {
-    salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:|{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
-  }
 
-  # phpLDAPadmin cookie secret
-  get_salt
-  sed -i "s/blowfish'] = '/blowfish'] = '${salt}/g" /osixia/phpldapadmin/config.php
+  # phpLDAPadmin directory is empty, we use the bootstrap
+  if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
+    cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
+    rm -rf /var/www/phpldapadmin_bootstrap
 
-  print_by_php_type() {
+    get_salt() {
+      salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:|{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
+    }
 
-    if [ "$1" == "True" ]; then
-      echo "true"
-    elif [ "$1" == "False" ]; then
-      echo "false"
-    elif [[ "$1" == array\(\'* ]]; then 
-      echo "$1"
-    else
-      echo "'$1'"
-    fi
-  }
+    # phpLDAPadmin cookie secret
+    get_salt
+    sed -i "s/blowfish'] = '/blowfish'] = '${salt}/g" /var/www/phpldapadmin/config/config.php
 
-  # phpLDAPadmin servers config
-  host_infos() { 
+    print_by_php_type() {
 
-    local to_print=$1
-    local infos=(${!2})
+      if [ "$1" == "True" ]; then
+        echo "true"
+      elif [ "$1" == "False" ]; then
+        echo "false"
+      elif [[ "$1" == array\(\'* ]]; then 
+        echo "$1"
+      else
+        echo "'$1'"
+      fi
+    }
 
-    for info in "${infos[@]}"
+    # phpLDAPadmin servers config
+    host_infos() { 
+
+      local to_print=$1
+      local infos=(${!2})
+
+      for info in "${infos[@]}"
+      do
+        host_infos_value "$to_print" "$info"
+      done
+    }
+
+    host_infos_value(){
+
+      local to_print=$1
+      local info_key_value=(${!2})
+
+      local key=${!info_key_value[0]}
+      local value=(${!info_key_value[1]})
+
+      local value_of_value_table=(${!value})
+
+      # it's a table of values
+      if [ "${#value[@]}" -gt "1" ]; then
+        host_infos "$to_print'$key'," "${info_key_value[1]}"
+
+      # the value of value is a table
+      elif [ "${#value_of_value_table[@]}" -gt "1" ]; then
+        host_infos_value "$to_print'$key'," "$value"
+
+      # the value contain a not empty variable
+      elif [ -n "${!value}" ]; then
+        local php_value=$(print_by_php_type ${!value})
+        echo "\$servers->setValue($to_print'$key',$php_value);" >> /var/www/phpldapadmin/config/config.php
+
+      # it's just a not empty value
+      elif [ -n "$value" ]; then
+        local php_value=$(print_by_php_type $value)
+        echo "\$servers->setValue($to_print'$key',$php_value);" >> /var/www/phpldapadmin/config/config.php
+      fi
+    }
+
+    # phpLDAPadmin config
+    LDAP_HOSTS=($LDAP_HOSTS)
+    for host in "${LDAP_HOSTS[@]}"
     do
-      host_infos_value "$to_print" "$info"
+      
+      #host var contain a variable name, we access to the variable value and cast it to a table
+      infos=(${!host})
+
+      echo "\$servers->newServer('ldap_pla');" >> /var/www/phpldapadmin/config/config.php
+
+      # it's a table of infos
+      if [ "${#infos[@]}" -gt "1" ]; then
+        echo "\$servers->setValue('server','name','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
+        echo "\$servers->setValue('server','host','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
+        host_infos "" ${infos[1]}
+
+      # it's just a host name
+      else
+        echo "\$servers->setValue('server','name','${!host}');" >> /var/www/phpldapadmin/config/config.php
+        echo "\$servers->setValue('server','host','${!host}');" >> /var/www/phpldapadmin/config/config.php
+      fi
     done
-  }
 
-  host_infos_value(){
-
-    local to_print=$1
-    local info_key_value=(${!2})
-
-    local key=${!info_key_value[0]}
-    local value=(${!info_key_value[1]})
-
-    local value_of_value_table=(${!value})
-
-    # it's a table of values
-    if [ "${#value[@]}" -gt "1" ]; then
-      host_infos "$to_print'$key'," "${info_key_value[1]}"
-
-    # the value of value is a table
-    elif [ "${#value_of_value_table[@]}" -gt "1" ]; then
-      host_infos_value "$to_print'$key'," "$value"
-
-    # the value contain a not empty variable
-    elif [ -n "${!value}" ]; then
-      local php_value=$(print_by_php_type ${!value})
-      echo "\$servers->setValue($to_print'$key',$php_value);" >> /osixia/phpldapadmin/config.php
-
-    # it's just a not empty value
-    elif [ -n "$value" ]; then
-      local php_value=$(print_by_php_type $value)
-      echo "\$servers->setValue($to_print'$key',$php_value);" >> /osixia/phpldapadmin/config.php
-    fi
-  }
-
-  # phpLDAPadmin config
-  LDAP_HOSTS=($LDAP_HOSTS)
-  for host in "${LDAP_HOSTS[@]}"
-  do
-    
-    #host var contain a variable name, we access to the variable value and cast it to a table
-    infos=(${!host})
-
-    echo "\$servers->newServer('ldap_pla');" >> /osixia/phpldapadmin/config.php
-
-    # it's a table of infos
-    if [ "${#infos[@]}" -gt "1" ]; then
-      echo "\$servers->setValue('server','name','${!infos[0]}');" >> /osixia/phpldapadmin/config.php
-      echo "\$servers->setValue('server','host','${!infos[0]}');" >> /osixia/phpldapadmin/config.php
-      host_infos "" ${infos[1]}
-
-    # it's just a host name
-    else
-      echo "\$servers->setValue('server','name','${!host}');" >> /osixia/phpldapadmin/config.php
-      echo "\$servers->setValue('server','host','${!host}');" >> /osixia/phpldapadmin/config.php
-    fi
-  done
-
+  fi
 
   # Fix file permission
   find /var/www/ -type d -exec chmod 755 {} \;
   find /var/www/ -type f -exec chmod 644 {} \;
-  chmod 400 /osixia/phpldapadmin/config.php
-  chown www-data:www-data -R /osixia/phpldapadmin/config.php
+  chmod 400 /var/www/phpldapadmin/config/config.php
+  chown www-data:www-data -R /var/www/phpldapadmin/config/config.php
   chown www-data:www-data -R /var/www
 
   touch $FIRST_START_DONE
