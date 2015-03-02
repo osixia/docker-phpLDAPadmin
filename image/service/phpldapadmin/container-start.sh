@@ -5,6 +5,12 @@ FIRST_START_DONE="/etc/docker-phpldapadmin-first-start-done"
 # container first start
 if [ ! -e "$FIRST_START_DONE" ]; then
 
+  # phpLDAPadmin directory is empty, we use the bootstrap
+  if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
+    cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
+    rm -rf /var/www/phpldapadmin_bootstrap
+  fi
+
   # create phpLDAPadmin vhost
   if [ "${HTTPS,,}" == "true" ]; then
 
