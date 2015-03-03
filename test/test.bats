@@ -33,7 +33,7 @@ load test_helper
   LDAP_IP=$(get_container_ip_by_cid $LDAP_CID)
 
   # we start the wordpress container and set DB_HOSTS
-  run_image -e LDAP_HOSTS="['$LDAP_IP']"
+  run_image -e LDAP_HOSTS=$LDAP_IP
 
   # wait openldap 
   wait_service_by_cid $LDAP_CID slapd

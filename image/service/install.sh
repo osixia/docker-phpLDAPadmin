@@ -4,9 +4,12 @@
 # Add phpLDAPadmin virtualhosts
 ln -s /osixia/phpldapadmin/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
 ln -s /osixia/phpldapadmin/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
+
 cp /osixia/phpldapadmin/config.php /var/www/phpldapadmin_bootstrap/config/config.php
+rm /osixia/phpldapadmin/config.php
 
 cat /osixia/phpldapadmin/php5-fpm/pool.conf >> /etc/php5/fpm/pool.d/www.conf
+rm /osixia/phpldapadmin/php5-fpm/pool.conf
 
 mkdir -p /var/www/tmp
 chown www-data:www-data /var/www/tmp

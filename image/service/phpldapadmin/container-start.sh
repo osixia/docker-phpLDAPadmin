@@ -126,7 +126,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   find /var/www/ -type d -exec chmod 755 {} \;
   find /var/www/ -type f -exec chmod 644 {} \;
   chmod 400 /var/www/phpldapadmin/config/config.php
-  chown www-data:www-data -R /var/www/phpldapadmin/config/config.php
   chown www-data:www-data -R /var/www
 
   touch $FIRST_START_DONE
