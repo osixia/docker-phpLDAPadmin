@@ -7,7 +7,7 @@ A docker image to run phpLDAPadmin
 ### Get phpLDAPadmin in 1''
 Run docker container with your custom environment variables :
 
-    sudo docker.io run -p 443:443 \
+    sudo docker run -p 443:443 \
                -e LDAP_HOST=ldap.example.com \
                -e LDAP_BASE_DN=dc=example,dc=com \
                -e LDAP_LOGIN_DN=cn=admin,dc=example,dc=com \
@@ -43,5 +43,5 @@ Clone the repository
 
 Build image
 
-    sudo docker.io build -t phpldapadmin .
+    sudo docker build -t phpldapadmin .
 

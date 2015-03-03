@@ -1,7 +1,0 @@
-testImage=osixia/phpldapadmin:latest
-testContainer=phpldapadmin-repository-test-container
-testDir=/osixia-repository-test-docker-phpldapadmin
-
-export testImage
-export testContainer
-export testDir
