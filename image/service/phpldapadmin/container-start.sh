@@ -22,7 +22,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     a2ensite phpldapadmin
   fi
 
-
   # phpLDAPadmin directory is empty, we use the bootstrap
   if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
     cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
@@ -120,6 +119,21 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
+  fi
+
+  if [ "${USE_LDAP_SSL,,}" == "true" ]; then
+
+    # check certificat and key or create it
+    /sbin/ssl-helper "/osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" "/osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" --ca-crt=/osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME} --gnutls
+
+    # ldap client config
+    sed -i "s,TLS_CACERT.*,TLS_CACERT /osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
+    echo "TLS_REQCERT $LDAP_REQCERT" >> /etc/ldap/ldap.conf
+
+    [[ -f "$HOME/.ldaprc" ]] && rm -f $HOME/.ldaprc
+    touch $HOME/.ldaprc
+    echo "TLS_CERT /osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" >> $HOME/.ldaprc
+    echo "TLS_KEY /osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" >> $HOME/.ldaprc
   fi
 
   # Fix file permission
