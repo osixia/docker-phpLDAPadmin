@@ -67,7 +67,6 @@ Add -e HTTPS=false to the run command :
 
 Environement variables defaults are set in **image/env.yaml**. You can modify environment variable values directly in this file and rebuild the image ([see manual build](#manual-build)). You can also override those values at run time with -e argument or by setting your own env.yaml file as a docker volume to `/etc/env.yaml`. See examples below.
 
-Ldap hosts :
 - **LDAP_HOSTS**: Set phpLDAPadmin server config. Defaults to :
 
 		   - ldap.example.org:
