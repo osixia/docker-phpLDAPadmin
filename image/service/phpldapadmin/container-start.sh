@@ -119,8 +119,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
-
-    if [ "${USE_LDAP_SSL,,}" == "true" ]; then
+    if [ "${USE_LDAP_CLIENT_SSL,,}" == "true" ]; then
 
       # check certificat and key or create it
       /sbin/ssl-helper "/osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" "/osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" --ca-crt=/osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME} --gnutls
