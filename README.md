@@ -109,13 +109,13 @@ HTTPS options :
 
 Ldap client TLS/LDAPS options :
 
-More information at : 16.2.2. Client Configuration http://www.openldap.org/doc/admin24/tls.html
-
 - **USE_LDAP_CLIENT_SSL**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
 - **LDAP_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
 - **LDAP_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /osixia/service/phpldapadmin/ssl/$LDAP_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
 - **LDAP_CRT_FILENAME**: Set .ldaprc TLS_CERT to /osixia/service/phpldapadmin/ssl/$LDAP_CRT_FILENAME. Defaults to `ldap-client.crt`
 - **LDAP_KEY_FILENAME**: Set .ldaprc TLS_KEY to /osixia/service/phpldapadmin/ssl/$LDAP_KEY_FILENAME. Defaults to `ldap-client.key`
+
+	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
 ### Set environment variables at run time :
 
