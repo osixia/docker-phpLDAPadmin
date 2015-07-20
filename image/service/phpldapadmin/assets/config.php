@@ -4,10 +4,14 @@
  ** IE: There should NOT be any blank lines or spaces BEFORE <?php
  **/
 
- $config->custom->debug['level'] = 255;
+ /*********************************************
+  * Useful important configuration overrides  *
+  *********************************************/
 
-
+ /* If you are asked to put PLA in debug mode, this is how you do it: */
+ $config->custom->debug['level'] = 0;
  $config->custom->debug['syslog'] = true;
+ #  $config->custom->debug['file'] = '/tmp/pla_debug.log';
 
 /**
  * The phpLDAPadmin config file

@@ -9,7 +9,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   if [ "${HTTPS,,}" == "true" ]; then
 
     # check certificat and key or create it
-    /sbin/ssl-helper "/osixia/service/phpldapadmin/assets/apache2/ssl/$SSL_CRT_FILENAME" "/osixia/service/phpldapadmin/assets/apache2/ssl/$SSL_KEY_FILENAME"
+    /sbin/ssl-helper "/osixia/service/phpldapadmin/assets/apache2/ssl/$SSL_CRT_FILENAME" "/osixia/service/phpldapadmin/assets/apache2/ssl/$SSL_KEY_FILENAME" --ca-crt=/osixia/service/phpldapadmin/assets/apache2/ssl/$SSL_CA_CRT_FILENAME
 
     # add CA certificat config if CA cert exists
     if [ -e "/osixia/service/phpldapadmin/assets/apache2/ssl/$SSL_CA_CRT_FILENAME" ]; then
@@ -119,21 +119,26 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
-  fi
 
-  if [ "${USE_LDAP_SSL,,}" == "true" ]; then
+    if [ "${USE_LDAP_SSL,,}" == "true" ]; then
 
-    # check certificat and key or create it
-    /sbin/ssl-helper "/osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" "/osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" --ca-crt=/osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME} --gnutls
+      # check certificat and key or create it
+      /sbin/ssl-helper "/osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" "/osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" --ca-crt=/osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME} --gnutls
 
-    # ldap client config
-    sed -i "s,TLS_CACERT.*,TLS_CACERT /osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
-    echo "TLS_REQCERT $LDAP_REQCERT" >> /etc/ldap/ldap.conf
+      # ldap client config
+      sed -i "s,TLS_CACERT.*,TLS_CACERT /osixia/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
+      echo "TLS_REQCERT $LDAP_REQCERT" >> /etc/ldap/ldap.conf
 
-    [[ -f "$HOME/.ldaprc" ]] && rm -f $HOME/.ldaprc
-    touch $HOME/.ldaprc
-    echo "TLS_CERT /osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" >> $HOME/.ldaprc
-    echo "TLS_KEY /osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" >> $HOME/.ldaprc
+      www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )
+
+      [[ -f "$www_data_homedir/.ldaprc" ]] && rm -f $www_data_homedir/.ldaprc
+      touch $www_data_homedir/.ldaprc
+      echo "TLS_CERT /osixia/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" >> $www_data_homedir/.ldaprc
+      echo "TLS_KEY /osixia/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" >> $www_data_homedir/.ldaprc
+
+      chown www-data:www-data -R /osixia/service/phpldapadmin/assets/ssl/
+    fi
+
   fi
 
   # Fix file permission
