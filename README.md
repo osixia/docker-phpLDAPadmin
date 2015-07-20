@@ -17,7 +17,25 @@ That's it :) you can access phpLDAPadmin on **https://localhost**
 
 ## Examples
 
-### OpenLDAP & phpLDAPadmin in 1''
+### OpenLDAP & phpLDAPadmin in 1'
+
+    # Run a ldap server, save the container id in LDAP_CID and get its IP:
+    LDAP_CID=$(docker run -h ldap.example.org -d osixia/openldap:1.0.0)
+    LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
+
+    # Run phpLDAPadmin and set ldap host
+    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e LDAP_HOSTS="ldap.example.org" -d osixia/phpldapadmin:0.6.0)
+
+    # Because ldap.example.org is a fake hostname
+    # we add a route to our ldap container in /etc/hosts
+    docker exec $PHPLDAP_CID /sbin/add-host $LDAP_IP ldap.example.org
+
+    # We get phpLDAPadmin container ip
+    PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
+
+    echo "Go to: https://$PHPLDAP_IP"
+    echo "Login DN: cn=admin,dc=example,dc=org"
+    echo "Password: admin"
 
 ### HTTPS
 
@@ -28,7 +46,7 @@ By default HTTPS is enable, a certificate is created with the container hostname
 
 #### Use your own certificate
 
-Add your custom certificate, private key and CA certificate in the directory **image/service/phpldapadmin/assets/apache2/ssl** adjust filename in **image/env.yml** and rebuild the image ([see manual build](#manual-build)).
+Add your custom certificate, private key and CA certificate in the directory **image/service/phpldapadmin/assets/apache2/ssl** adjust filename in **image/env.yaml** and rebuild the image ([see manual build](#manual-build)).
 
 Or you can set your custom certificate at run time, by mouting your a directory containing thoses files to **/osixia/service/phpldapadmin/assets/apache2/ssl** and adjust there name with the following environment variables :
 
@@ -52,12 +70,12 @@ Add -e HTTPS=false to the run command :
 Clone this project :
 
 	git clone https://github.com/osixia/docker-phpLDAPadmin
-	cd docker-mariadb
+	cd docker-phpLDAPadmin
 
 Adapt Makefile, set your image NAME and VERSION, for example :
 
 	NAME = osixia/phpldapadmin
-	VERSION = 0.5.0
+	VERSION = 0.6.0
 
 	becomes :
 	NAME = billy-the-king/phpldapadmin
