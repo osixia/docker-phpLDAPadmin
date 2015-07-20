@@ -69,13 +69,14 @@ Environement variables defaults are set in **image/env.yaml**. You can modify en
 
 Ldap hosts :
 - **LDAP_HOSTS**: Set phpLDAPadmin server config. Defaults to :
-	   - ldap.example.org:
-	    - server:
-	      - tls: true
-	    - login:
-	      - bind_id: cn=admin,dc=example,dc=org
-	  - ldap2.example.org
-	  - ldap3.example.org
+
+		   - ldap.example.org:
+		    - server:
+		      - tls: true
+		    - login:
+		      - bind_id: cn=admin,dc=example,dc=org
+		  - ldap2.example.org
+		  - ldap3.example.org
 
 	This will be converted in the phpldapadmin config.php file to :
 
@@ -92,6 +93,7 @@ Ldap hosts :
 		$servers->setValue('server','host','ldap3.example.org');
 
 	If you want to set this variable at docker run command convert the yaml in python :
+	
 		docker run -e LDAP_HOSTS="[{'ldap.example.org': [{'server': [{'tls': True}]},{'login': [{'bind_id': 'cn=admin,dc=example,dc=org'}]}]}, 'ldap2.example.org', 'ldap3.example.org']" -d osixia/phpldapadmin
 
 	To convert yaml to python online :
