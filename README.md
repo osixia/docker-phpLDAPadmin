@@ -107,7 +107,7 @@ HTTPS options :
 - **SSL_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
 - **SSL_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
 
-Ldap TLS/LDAPS options :
+Ldap client TLS/LDAPS options :
 
 More information at : 16.2.2. Client Configuration http://www.openldap.org/doc/admin24/tls.html
 
