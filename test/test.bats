@@ -11,7 +11,7 @@ load test_helper
 @test "http response" {
 
   tmp_file="$BATS_TMPDIR/docker-test"
-  
+
   run_image
   wait_service apache2 php5-fpm
   curl --silent --insecure https://$CONTAINER_IP >> $tmp_file
@@ -27,15 +27,15 @@ load test_helper
 @test "http response with ldap login" {
 
   tmp_file="$BATS_TMPDIR/docker-test"
-  
+
   # we start a new openldap container
-  LDAP_CID=$(docker run -d osixia/openldap:0.10.0)
+  LDAP_CID=$(docker run -d osixia/openldap:1.0.0)
   LDAP_IP=$(get_container_ip_by_cid $LDAP_CID)
 
   # we start the wordpress container and set DB_HOSTS
   run_image -e LDAP_HOSTS=$LDAP_IP
 
-  # wait openldap 
+  # wait openldap
   wait_service_by_cid $LDAP_CID slapd
 
   # wait phpLDAPadmin container apache2 service
