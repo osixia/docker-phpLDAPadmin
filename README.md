@@ -21,16 +21,14 @@ That's it :) you can access phpLDAPadmin on **https://localhost**
 
 Example script:
 
+    #!/bin/bash -e
+
     # Run a ldap server, save the container id in LDAP_CID and get its IP:
     LDAP_CID=$(docker run -h ldap.example.org -d osixia/openldap:1.0.0)
     LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
 
-    # Run phpLDAPadmin and set ldap host
-    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e LDAP_HOSTS="ldap.example.org" -d osixia/phpldapadmin:0.6.0)
-
-    # Because ldap.example.org is a fake hostname
-    # we add a route to our ldap container in /etc/hosts
-    docker exec $PHPLDAP_CID /sbin/add-host $LDAP_IP ldap.example.org
+    # Run phpLDAPadmin and set ldap host to ldap ip
+    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.0)
 
     # We get phpLDAPadmin container ip
     PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
