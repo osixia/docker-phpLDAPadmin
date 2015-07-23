@@ -48,9 +48,9 @@ By default HTTPS is enable, a certificate is created with the container hostname
 
 Add your custom certificate, private key and CA certificate in the directory **image/service/phpldapadmin/assets/apache2/ssl** adjust filename in **image/env.yaml** and rebuild the image ([see manual build](#manual-build)).
 
-Or you can set your custom certificate at run time, by mouting your a directory containing thoses files to **/osixia/service/phpldapadmin/assets/apache2/ssl** and adjust there name with the following environment variables :
+Or you can set your custom certificate at run time, by mouting your a directory containing thoses files to **/container/service/phpldapadmin/assets/apache2/ssl** and adjust there name with the following environment variables :
 
-	docker run -v /path/to/certifates:/osixia/service/phpldapadmin/assets/apache2/ssl \
+	docker run -v /path/to/certifates:/container/service/phpldapadmin/assets/apache2/ssl \
 	-e SSL_CRT_FILENAME=my-phpldapadmin.crt \
 	-e SSL_KEY_FILENAME=my-phpldapadmin.key \
 	-e SSL_CA_CRT_FILENAME=the-ca.crt \
@@ -92,7 +92,7 @@ Environement variables defaults are set in **image/env.yaml**. You can modify en
 		$servers->setValue('server','host','ldap3.example.org');
 
 	If you want to set this variable at docker run command convert the yaml in python :
-	
+
 		docker run -e LDAP_HOSTS="[{'ldap.example.org': [{'server': [{'tls': True}]},{'login': [{'bind_id': 'cn=admin,dc=example,dc=org'}]}]}, 'ldap2.example.org', 'ldap3.example.org']" -d osixia/phpldapadmin
 
 	To convert yaml to python online :
@@ -111,9 +111,9 @@ Ldap client TLS/LDAPS options :
 
 - **USE_LDAP_CLIENT_SSL**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
 - **LDAP_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
-- **LDAP_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /osixia/service/phpldapadmin/ssl/$LDAP_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
-- **LDAP_CRT_FILENAME**: Set .ldaprc TLS_CERT to /osixia/service/phpldapadmin/ssl/$LDAP_CRT_FILENAME. Defaults to `ldap-client.crt`
-- **LDAP_KEY_FILENAME**: Set .ldaprc TLS_KEY to /osixia/service/phpldapadmin/ssl/$LDAP_KEY_FILENAME. Defaults to `ldap-client.key`
+- **LDAP_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/ssl/$LDAP_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
+- **LDAP_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/ssl/$LDAP_CRT_FILENAME. Defaults to `ldap-client.crt`
+- **LDAP_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/ssl/$LDAP_KEY_FILENAME. Defaults to `ldap-client.key`
 
 	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
