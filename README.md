@@ -1,8 +1,9 @@
 # osixia/phpldapadmin
 
+[![](https://badge.imagelayers.io/osixia/phpldapadmin:latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest 'Get your own badge on imagelayers.io')
+
 A docker image to run phpLDAPadmin.
 > [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
-
 
 ## Quick start
 
