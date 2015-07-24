@@ -9,11 +9,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   if [ "${HTTPS,,}" == "true" ]; then
 
     # check certificat and key or create it
-    /sbin/ssl-kit "/osixia/phpldapadmin/apache2/ssl/$SSL_CRT_FILENAME" "/osixia/phpldapadmin/apache2/ssl/$SSL_KEY_FILENAME"
+    /sbin/ssl-helper "/container/service/phpldapadmin/assets/apache2/ssl/$SSL_CRT_FILENAME" "/container/service/phpldapadmin/assets/apache2/ssl/$SSL_KEY_FILENAME" --ca-crt=/container/service/phpldapadmin/assets/apache2/ssl/$SSL_CA_CRT_FILENAME
 
     # add CA certificat config if CA cert exists
-    if [ -e "/osixia/phpldapadmin/apache2/ssl/$SSL_CA_CRT_FILENAME" ]; then
-      sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" /osixia/phpldapadmin/apache2/phpldapadmin-ssl.conf
+    if [ -e "/container/service/phpldapadmin/assets/apache2/ssl/$SSL_CA_CRT_FILENAME" ]; then
+      sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
     fi
 
     a2ensite phpldapadmin-ssl
@@ -21,7 +21,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   else
     a2ensite phpldapadmin
   fi
-
 
   # phpLDAPadmin directory is empty, we use the bootstrap
   if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
@@ -42,7 +41,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
         echo "true"
       elif [ "$1" == "False" ]; then
         echo "false"
-      elif [[ "$1" == array\(\'* ]]; then 
+      elif [[ "$1" == array\(\'* ]]; then
         echo "$1"
       else
         echo "'$1'"
@@ -50,7 +49,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     }
 
     # phpLDAPadmin servers config
-    host_infos() { 
+    host_infos() {
 
       local to_print=$1
       local infos=(${!2})
@@ -95,7 +94,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     LDAP_HOSTS=($LDAP_HOSTS)
     for host in "${LDAP_HOSTS[@]}"
     do
-      
+
       #host var contain a variable name, we access to the variable value and cast it to a table
       infos=(${!host})
 
@@ -106,19 +105,38 @@ if [ ! -e "$FIRST_START_DONE" ]; then
         echo "\$servers->setValue('server','name','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
         echo "\$servers->setValue('server','host','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
         host_infos "" ${infos[1]}
-      
-      # it's just a host name 
+
+      # it's just a host name
       # stored in a variable
       elif [ -n "${!host}" ]; then
         echo "\$servers->setValue('server','name','${!host}');" >> /var/www/phpldapadmin/config/config.php
         echo "\$servers->setValue('server','host','${!host}');" >> /var/www/phpldapadmin/config/config.php
-      
+
       # directly
       else
         echo "\$servers->setValue('server','name','${host}');" >> /var/www/phpldapadmin/config/config.php
         echo "\$servers->setValue('server','host','${host}');" >> /var/www/phpldapadmin/config/config.php
       fi
     done
+
+    if [ "${USE_LDAP_CLIENT_SSL,,}" == "true" ]; then
+
+      # check certificat and key or create it
+      /sbin/ssl-helper "/container/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" "/container/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" --ca-crt=/container/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME} --gnutls
+
+      # ldap client config
+      sed -i "s,TLS_CACERT.*,TLS_CACERT /container/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
+      echo "TLS_REQCERT $LDAP_REQCERT" >> /etc/ldap/ldap.conf
+
+      www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )
+
+      [[ -f "$www_data_homedir/.ldaprc" ]] && rm -f $www_data_homedir/.ldaprc
+      touch $www_data_homedir/.ldaprc
+      echo "TLS_CERT /container/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" >> $www_data_homedir/.ldaprc
+      echo "TLS_KEY /container/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" >> $www_data_homedir/.ldaprc
+
+      chown www-data:www-data -R /container/service/phpldapadmin/assets/ssl/
+    fi
 
   fi
 

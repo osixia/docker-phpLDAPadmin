@@ -1,5 +1,10 @@
-## 0.5.1 (release date: 2015-05-17)
+# Changelog
+
+## 0.6.0
+  - Use new baseimage: osixia/light-baseimage
+
+## 0.5.1
   - Fix #1 (can't activate SSL with own certificates)
 
-## 0.5.0 (release date: 2015-03-03)
+## 0.5.0
   - New version initial release
