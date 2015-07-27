@@ -10,7 +10,7 @@ A docker image to run phpLDAPadmin.
 Run a phpLDAPadmin docker image by replacing `ldap.example.com` with your ldap host or IP :
 
     sudo docker run -p 443:443 \
-               -e LDAP_HOSTS=ldap.example.com \
+               -e PHPLDAPADMIN_LDAP_HOSTS=ldap.example.com \
                -d osixia/phpldapadmin
 
 That's it :) you can access phpLDAPadmin on **https://localhost**
@@ -29,7 +29,7 @@ Example script:
     LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
 
     # Run phpLDAPadmin and set ldap host to ldap ip
-    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.0)
+    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.0)
 
     # We get phpLDAPadmin container ip
     PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
@@ -52,23 +52,23 @@ Add your custom certificate, private key and CA certificate in the directory **i
 Or you can set your custom certificate at run time, by mouting your a directory containing thoses files to **/container/service/phpldapadmin/assets/apache2/certs** and adjust there name with the following environment variables :
 
 	docker run -v /path/to/certifates:/container/service/phpldapadmin/assets/apache2/certs \
-	-e HTTPS_CRT_FILENAME=my-phpldapadmin.crt \
-	-e HTTPS_KEY_FILENAME=my-phpldapadmin.key \
-	-e HTTPS_CA_CRT_FILENAME=the-ca.crt \
+	-e PHPLDAPADMIN_HTTPS_CRT_FILENAME=my-phpldapadmin.crt \
+	-e PHPLDAPADMIN_HTTPS_KEY_FILENAME=my-phpldapadmin.key \
+	-e PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME=the-ca.crt \
 	-d osixia/phpldapadmin
 
-Ommit the -e HTTPS_CA_CRT_FILENAME variable for self signed certificates
+Ommit the -e PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME variable for self signed certificates
 
-#### Disable HTTPS
-Add -e HTTPS=false to the run command :
+#### Disable PHPLDAPADMIN_HTTPS
+Add -e PHPLDAPADMIN_HTTPS=false to the run command :
 
-    docker run -e HTTPS=false -d osixia/phpldapadmin
+    docker run -e PHPLDAPADMIN_HTTPS=false -d osixia/phpldapadmin
 
 ## Environment Variables
 
 Environement variables defaults are set in **image/env.yaml**. You can modify environment variable values directly in this file and rebuild the image ([see manual build](#manual-build)). You can also override those values at run time with -e argument or by setting your own env.yaml file as a docker volume to `/etc/env.yaml`. See examples below.
 
-- **LDAP_HOSTS**: Set phpLDAPadmin server config. Defaults to :
+- **PHPLDAPADMIN_LDAP_HOSTS**: Set phpLDAPadmin server config. Defaults to :
 
 		   - ldap.example.org:
 		    - server:
@@ -94,27 +94,27 @@ Environement variables defaults are set in **image/env.yaml**. You can modify en
 
 	If you want to set this variable at docker run command convert the yaml in python :
 
-		docker run -e LDAP_HOSTS="[{'ldap.example.org': [{'server': [{'tls': True}]},{'login': [{'bind_id': 'cn=admin,dc=example,dc=org'}]}]}, 'ldap2.example.org', 'ldap3.example.org']" -d osixia/phpldapadmin
+		docker run -e PHPLDAPADMIN_LDAP_HOSTS="[{'ldap.example.org': [{'server': [{'tls': True}]},{'login': [{'bind_id': 'cn=admin,dc=example,dc=org'}]}]}, 'ldap2.example.org', 'ldap3.example.org']" -d osixia/phpldapadmin
 
 	To convert yaml to python online :
 	http://yaml-online-parser.appspot.com/
 
 Apache config :
-- **SERVER_ADMIN**: Server admin email. Defaults to `webmaster@example.org`
+- **PHPLDAPADMIN_SERVER_ADMIN**: Server admin email. Defaults to `webmaster@example.org`
 
-HTTPS options :
-- **HTTPS**: Use apache ssl config. Defaults to `true`
-- **HTTPS_CRT_FILENAME**: Apache ssl certificate filename. Defaults to `phpldapadmin.crt`
-- **HTTPS_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
-- **HTTPS_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
+PHPLDAPADMIN_HTTPS options :
+- **PHPLDAPADMIN_HTTPS**: Use apache ssl config. Defaults to `true`
+- **PHPLDAPADMIN_HTTPS_CRT_FILENAME**: Apache ssl certificate filename. Defaults to `phpldapadmin.crt`
+- **PHPLDAPADMIN_HTTPS_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
+- **PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
 
 Ldap client TLS/LDAPS options :
 
-- **LDAP_CLIENT_USE_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
-- **LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
-- **LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/ssl/$LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
-- **LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/ssl/$LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
-- **LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/ssl/$LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/ssl/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/ssl/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/ssl/$PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
 
 	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
@@ -122,7 +122,7 @@ Ldap client TLS/LDAPS options :
 
 Environment variable can be set directly by adding the -e argument in the command line, for example :
 
-	docker run -h phpldapadmin.example.org -e LDAP_HOSTS="ldap.example.org" \
+	docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS="ldap.example.org" \
 	-d osixia/phpldapadmin
 
 Or by setting your own `env.yaml` file as a docker volume to `/etc/env.yaml`

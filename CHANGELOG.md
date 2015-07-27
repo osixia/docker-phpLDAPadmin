@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.6.1
-  - Rename environment variable
+  - Rename environment variables
 
 ## 0.6.0
   - Use new baseimage: osixia/light-baseimage
