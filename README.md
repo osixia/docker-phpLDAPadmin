@@ -47,17 +47,17 @@ By default HTTPS is enable, a certificate is created with the container hostname
 
 #### Use your own certificate
 
-Add your custom certificate, private key and CA certificate in the directory **image/service/phpldapadmin/assets/apache2/ssl** adjust filename in **image/env.yaml** and rebuild the image ([see manual build](#manual-build)).
+Add your custom certificate, private key and CA certificate in the directory **image/service/phpldapadmin/assets/apache2/certs** adjust filename in **image/env.yaml** and rebuild the image ([see manual build](#manual-build)).
 
-Or you can set your custom certificate at run time, by mouting your a directory containing thoses files to **/container/service/phpldapadmin/assets/apache2/ssl** and adjust there name with the following environment variables :
+Or you can set your custom certificate at run time, by mouting your a directory containing thoses files to **/container/service/phpldapadmin/assets/apache2/certs** and adjust there name with the following environment variables :
 
-	docker run -v /path/to/certifates:/container/service/phpldapadmin/assets/apache2/ssl \
-	-e SSL_CRT_FILENAME=my-phpldapadmin.crt \
-	-e SSL_KEY_FILENAME=my-phpldapadmin.key \
-	-e SSL_CA_CRT_FILENAME=the-ca.crt \
+	docker run -v /path/to/certifates:/container/service/phpldapadmin/assets/apache2/certs \
+	-e HTTPS_CRT_FILENAME=my-phpldapadmin.crt \
+	-e HTTPS_KEY_FILENAME=my-phpldapadmin.key \
+	-e HTTPS_CA_CRT_FILENAME=the-ca.crt \
 	-d osixia/phpldapadmin
 
-Ommit the -e SSL_CA_CRT_FILENAME variable for self signed certificates
+Ommit the -e HTTPS_CA_CRT_FILENAME variable for self signed certificates
 
 #### Disable HTTPS
 Add -e HTTPS=false to the run command :
@@ -104,17 +104,17 @@ Apache config :
 
 HTTPS options :
 - **HTTPS**: Use apache ssl config. Defaults to `true`
-- **SSL_CRT_FILENAME**: Apache ssl certificate filename. Defaults to `phpldapadmin.crt`
-- **SSL_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
-- **SSL_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
+- **HTTPS_CRT_FILENAME**: Apache ssl certificate filename. Defaults to `phpldapadmin.crt`
+- **HTTPS_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
+- **HTTPS_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
 
 Ldap client TLS/LDAPS options :
 
-- **USE_LDAP_CLIENT_SSL**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
-- **LDAP_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
-- **LDAP_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/ssl/$LDAP_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
-- **LDAP_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/ssl/$LDAP_CRT_FILENAME. Defaults to `ldap-client.crt`
-- **LDAP_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/ssl/$LDAP_KEY_FILENAME. Defaults to `ldap-client.key`
+- **LDAP_CLIENT_USE_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
+- **LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
+- **LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/ssl/$LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
+- **LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/ssl/$LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
+- **LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/ssl/$LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
 
 	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
