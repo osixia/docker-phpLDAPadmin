@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.6.1
+  - Upgrade baseimage: osixia/web-baseimage:0.1.1
   - Rename environment variables
 
 ## 0.6.0
