@@ -28,12 +28,12 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     rm -rf /var/www/phpldapadmin_bootstrap
 
     get_salt() {
-      salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:|{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
+      salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
     }
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i "s/blowfish'] = '/blowfish'] = '${salt}/g" /var/www/phpldapadmin/config/config.php
+    sed -i "s|{{ PHPMYADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
 
     print_by_php_type() {
 
