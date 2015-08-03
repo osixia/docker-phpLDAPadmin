@@ -95,7 +95,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     for host in "${PHPLDAPADMIN_LDAP_HOSTS[@]}"
     do
 
-      #host var contain a variable name, we access to the variable value and cast it to a table
+      # host var contain a variable name, we access to the variable value and cast it to a table
       infos=(${!host})
 
       echo "\$servers->newServer('ldap_pla');" >> /var/www/phpldapadmin/config/config.php
@@ -140,7 +140,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
   fi
 
-  # Fix file permission
+  # fix file permission
   find /var/www/ -type d -exec chmod 755 {} \;
   find /var/www/ -type f -exec chmod 644 {} \;
   chmod 400 /var/www/phpldapadmin/config/config.php
