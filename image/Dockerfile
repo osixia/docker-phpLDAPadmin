@@ -10,7 +10,7 @@ ENV PHPLDAPADMIN_SHA1 669fca66c75e24137e106fdd02e3832f81146e23
 CMD ["/container/tool/run"]
 
 # Install apache2 and php5-fpm using osixia/baseimage utils
-# Caution: /sbin/add-service-available arguments order is important
+# Caution: /container/tool/install-service-available arguments order is important
 # php5-fpm install will detect apache2 and configure it
 
 # Download, check integrity and unzip phpLDAPadmin to /var/www/phpldapadmin_bootstrap
