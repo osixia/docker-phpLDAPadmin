@@ -29,7 +29,7 @@ load test_helper
   tmp_file="$BATS_TMPDIR/docker-test"
 
   # we start a new openldap container
-  LDAP_CID=$(docker run -d osixia/openldap:1.0.0)
+  LDAP_CID=$(docker run -d osixia/openldap:1.0.1)
   LDAP_IP=$(get_container_ip_by_cid $LDAP_CID)
 
   # we start the wordpress container and set DB_HOSTS
