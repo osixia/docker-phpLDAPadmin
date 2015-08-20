@@ -59,7 +59,7 @@ Or you can set your custom certificate at run time, by mouting your a directory 
 
 Ommit the -e PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME variable for self signed certificates
 
-#### Disable PHPLDAPADMIN_HTTPS
+#### Disable HTTPS
 Add -e PHPLDAPADMIN_HTTPS=false to the run command :
 
     docker run -e PHPLDAPADMIN_HTTPS=false -d osixia/phpldapadmin
@@ -112,9 +112,9 @@ Ldap client TLS/LDAPS options :
 
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/ssl/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/ssl/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/ssl/$PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/assets/ldap-client/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/assets/ldap-client/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/assets/ldap-client/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
 
 	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
