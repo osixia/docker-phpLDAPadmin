@@ -1,7 +1,7 @@
 #!/bin/bash -e
 # this script is run during the image build
 
-# Add phpLDAPadmin virtualhosts
+# add phpLDAPadmin virtualhosts
 ln -s /container/service/phpldapadmin/assets/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
 ln -s /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
 
@@ -14,11 +14,11 @@ rm /container/service/phpldapadmin/assets/php5-fpm/pool.conf
 mkdir -p /var/www/tmp
 chown www-data:www-data /var/www/tmp
 
-# Remove apache default host
+# remove apache default host
 a2dissite 000-default
 rm -rf /var/www/html
 
-# Delete unnecessary files
+# delete unnecessary files
 rm -rf /var/www/phpldapadmin_bootstrap/doc
 
 # apply php5.5 patch

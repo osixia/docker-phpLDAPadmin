@@ -6,13 +6,13 @@ FIRST_START_DONE="/etc/docker-phpldapadmin-first-start-done"
 if [ ! -e "$FIRST_START_DONE" ]; then
 
   # create phpLDAPadmin vhost
-  if [ "${HTTPS,,}" == "true" ]; then
+  if [ "${PHPLDAPADMIN_HTTPS,,}" == "true" ]; then
 
     # check certificat and key or create it
-    /sbin/ssl-helper "/container/service/phpldapadmin/assets/apache2/ssl/$SSL_CRT_FILENAME" "/container/service/phpldapadmin/assets/apache2/ssl/$SSL_KEY_FILENAME" --ca-crt=/container/service/phpldapadmin/assets/apache2/ssl/$SSL_CA_CRT_FILENAME
+    /sbin/ssl-helper "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" --ca-crt=/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME
 
     # add CA certificat config if CA cert exists
-    if [ -e "/container/service/phpldapadmin/assets/apache2/ssl/$SSL_CA_CRT_FILENAME" ]; then
+    if [ -e "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then
       sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
     fi
 
@@ -28,12 +28,12 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     rm -rf /var/www/phpldapadmin_bootstrap
 
     get_salt() {
-      salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:|{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
+      salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
     }
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i "s/blowfish'] = '/blowfish'] = '${salt}/g" /var/www/phpldapadmin/config/config.php
+    sed -i "s|{{ PHPMYADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
 
     print_by_php_type() {
 
@@ -91,11 +91,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     }
 
     # phpLDAPadmin config
-    LDAP_HOSTS=($LDAP_HOSTS)
-    for host in "${LDAP_HOSTS[@]}"
+    PHPLDAPADMIN_LDAP_HOSTS=($PHPLDAPADMIN_LDAP_HOSTS)
+    for host in "${PHPLDAPADMIN_LDAP_HOSTS[@]}"
     do
 
-      #host var contain a variable name, we access to the variable value and cast it to a table
+      # host var contain a variable name, we access to the variable value and cast it to a table
       infos=(${!host})
 
       echo "\$servers->newServer('ldap_pla');" >> /var/www/phpldapadmin/config/config.php
@@ -119,28 +119,28 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
-    if [ "${USE_LDAP_CLIENT_SSL,,}" == "true" ]; then
+    if [ "${PHPLDAPADMIN_LDAP_CLIENT_TLS,,}" == "true" ]; then
 
       # check certificat and key or create it
-      /sbin/ssl-helper "/container/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" "/container/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" --ca-crt=/container/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME} --gnutls
+      /sbin/ssl-helper "/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" --ca-crt=/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME} --gnutls
 
       # ldap client config
-      sed -i "s,TLS_CACERT.*,TLS_CACERT /container/service/phpldapadmin/assets/ssl/${LDAP_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
-      echo "TLS_REQCERT $LDAP_REQCERT" >> /etc/ldap/ldap.conf
+      sed -i "s,TLS_CACERT.*,TLS_CACERT /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
+      echo "TLS_REQCERT $PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT" >> /etc/ldap/ldap.conf
 
       www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )
 
       [[ -f "$www_data_homedir/.ldaprc" ]] && rm -f $www_data_homedir/.ldaprc
       touch $www_data_homedir/.ldaprc
-      echo "TLS_CERT /container/service/phpldapadmin/assets/ssl/${LDAP_CRT_FILENAME}" >> $www_data_homedir/.ldaprc
-      echo "TLS_KEY /container/service/phpldapadmin/assets/ssl/${LDAP_KEY_FILENAME}" >> $www_data_homedir/.ldaprc
+      echo "TLS_CERT /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" >> $www_data_homedir/.ldaprc
+      echo "TLS_KEY /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" >> $www_data_homedir/.ldaprc
 
-      chown www-data:www-data -R /container/service/phpldapadmin/assets/ssl/
+      chown www-data:www-data -R /container/service/phpldapadmin/assets/ldap-client/certs/
     fi
 
   fi
 
-  # Fix file permission
+  # fix file permission
   find /var/www/ -type d -exec chmod 755 {} \;
   find /var/www/ -type f -exec chmod 644 {} \;
   chmod 400 /var/www/phpldapadmin/config/config.php
