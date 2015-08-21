@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.2
+  - Better way to add custom config
+
 ## 0.6.1
   - Upgrade baseimage: osixia/web-baseimage:0.1.1
   - Rename environment variables

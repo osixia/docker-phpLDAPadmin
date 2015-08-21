@@ -5,9 +5,6 @@
 ln -s /container/service/phpldapadmin/assets/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
 ln -s /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
 
-cp /container/service/phpldapadmin/assets/config.php /var/www/phpldapadmin_bootstrap/config/config.php
-rm /container/service/phpldapadmin/assets/config.php
-
 cat /container/service/phpldapadmin/assets/php5-fpm/pool.conf >> /etc/php5/fpm/pool.d/www.conf
 rm /container/service/phpldapadmin/assets/php5-fpm/pool.conf
 

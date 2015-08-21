@@ -27,13 +27,21 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
     rm -rf /var/www/phpldapadmin_bootstrap
 
+    echo "link /container/service/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
+    ln -s /container/service/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+
     get_salt() {
       salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
     }
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i "s|{{ PHPMYADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
+    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
+
+    append_to_servers() {
+      TO_APPEND=$1
+      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
+    }
 
     print_by_php_type() {
 
@@ -81,12 +89,12 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       # the value contain a not empty variable
       elif [ -n "${!value}" ]; then
         local php_value=$(print_by_php_type ${!value})
-        echo "\$servers->setValue($to_print'$key',$php_value);" >> /var/www/phpldapadmin/config/config.php
+        append_to_servers "\$servers->setValue($to_print'$key',$php_value);"
 
       # it's just a not empty value
       elif [ -n "$value" ]; then
         local php_value=$(print_by_php_type $value)
-        echo "\$servers->setValue($to_print'$key',$php_value);" >> /var/www/phpldapadmin/config/config.php
+        append_to_servers "\$servers->setValue($to_print'$key',$php_value);"
       fi
     }
 
@@ -98,46 +106,48 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       # host var contain a variable name, we access to the variable value and cast it to a table
       infos=(${!host})
 
-      echo "\$servers->newServer('ldap_pla');" >> /var/www/phpldapadmin/config/config.php
+      append_to_servers "\$servers->newServer('ldap_pla');"
 
       # it's a table of infos
       if [ "${#infos[@]}" -gt "1" ]; then
-        echo "\$servers->setValue('server','name','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
-        echo "\$servers->setValue('server','host','${!infos[0]}');" >> /var/www/phpldapadmin/config/config.php
+        append_to_servers "\$servers->setValue('server','name','${!infos[0]}');"
+        append_to_servers "\$servers->setValue('server','host','${!infos[0]}');"
         host_infos "" ${infos[1]}
 
       # it's just a host name
       # stored in a variable
       elif [ -n "${!host}" ]; then
-        echo "\$servers->setValue('server','name','${!host}');" >> /var/www/phpldapadmin/config/config.php
-        echo "\$servers->setValue('server','host','${!host}');" >> /var/www/phpldapadmin/config/config.php
+        append_to_servers "\$servers->setValue('server','name','${!host}');"
+        append_to_servers "\$servers->setValue('server','host','${!host}');"
 
       # directly
       else
-        echo "\$servers->setValue('server','name','${host}');" >> /var/www/phpldapadmin/config/config.php
-        echo "\$servers->setValue('server','host','${host}');" >> /var/www/phpldapadmin/config/config.php
+        append_to_servers "\$servers->setValue('server','name','${host}');"
+        append_to_servers "\$servers->setValue('server','host','${host}');"
       fi
     done
 
-    if [ "${PHPLDAPADMIN_LDAP_CLIENT_TLS,,}" == "true" ]; then
+    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
 
-      # check certificat and key or create it
-      /sbin/ssl-helper "/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" --ca-crt=/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME} --gnutls
+  fi
 
-      # ldap client config
-      sed -i "s,TLS_CACERT.*,TLS_CACERT /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
-      echo "TLS_REQCERT $PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT" >> /etc/ldap/ldap.conf
+  if [ "${PHPLDAPADMIN_LDAP_CLIENT_TLS,,}" == "true" ]; then
 
-      www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )
+    # check certificat and key or create it
+    /sbin/ssl-helper "/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" --ca-crt=/container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME} --gnutls
 
-      [[ -f "$www_data_homedir/.ldaprc" ]] && rm -f $www_data_homedir/.ldaprc
-      touch $www_data_homedir/.ldaprc
-      echo "TLS_CERT /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" >> $www_data_homedir/.ldaprc
-      echo "TLS_KEY /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" >> $www_data_homedir/.ldaprc
+    # ldap client config
+    sed -i "s,TLS_CACERT.*,TLS_CACERT /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
+    echo "TLS_REQCERT $PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT" >> /etc/ldap/ldap.conf
 
-      chown www-data:www-data -R /container/service/phpldapadmin/assets/ldap-client/certs/
-    fi
+    www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )
 
+    [[ -f "$www_data_homedir/.ldaprc" ]] && rm -f $www_data_homedir/.ldaprc
+    touch $www_data_homedir/.ldaprc
+    echo "TLS_CERT /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" >> $www_data_homedir/.ldaprc
+    echo "TLS_KEY /container/service/phpldapadmin/assets/ldap-client/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" >> $www_data_homedir/.ldaprc
+
+    chown www-data:www-data -R /container/service/phpldapadmin/assets/ldap-client/certs/
   fi
 
   # fix file permission
