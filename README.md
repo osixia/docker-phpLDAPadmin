@@ -29,7 +29,7 @@ Example script:
     LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
 
     # Run phpLDAPadmin and set ldap host to ldap ip
-    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.1)
+    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.2)
 
     # We get phpLDAPadmin container ip
     PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
@@ -99,16 +99,16 @@ Environement variables defaults are set in **image/env.yaml**. You can modify en
 	To convert yaml to python online :
 	http://yaml-online-parser.appspot.com/
 
-Apache config :
+Apache :
 - **PHPLDAPADMIN_SERVER_ADMIN**: Server admin email. Defaults to `webmaster@example.org`
 
-PHPLDAPADMIN_HTTPS options :
+HTTPS :
 - **PHPLDAPADMIN_HTTPS**: Use apache ssl config. Defaults to `true`
 - **PHPLDAPADMIN_HTTPS_CRT_FILENAME**: Apache ssl certificate filename. Defaults to `phpldapadmin.crt`
 - **PHPLDAPADMIN_HTTPS_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
 - **PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
 
-Ldap client TLS/LDAPS options :
+Ldap client TLS/LDAPS :
 
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
@@ -140,7 +140,7 @@ Clone this project :
 Adapt Makefile, set your image NAME and VERSION, for example :
 
 	NAME = osixia/phpldapadmin
-	VERSION = 0.6.0
+	VERSION = 0.6.2
 
 	becomes :
 	NAME = billy-the-king/phpldapadmin
