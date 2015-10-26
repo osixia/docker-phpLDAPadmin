@@ -66,7 +66,7 @@ Add -e PHPLDAPADMIN_HTTPS=false to the run command :
 
 ## Environment Variables
 
-Environement variables defaults are set in **image/env.yaml**. You can modify environment variable values directly in this file and rebuild the image ([see manual build](#manual-build)). You can also override those values at run time with -e argument or by setting your own env.yaml file as a docker volume to `/etc/env.yaml`. See examples below.
+Environement variables defaults are set in **image/env.yaml**. You can modify environment variable values directly in this file and rebuild the image ([see manual build](#manual-build)). You can also override those values at run time with -e argument or by setting your own env.yaml file as a docker volume to `/container/environment/env.yaml`. See examples below.
 
 - **PHPLDAPADMIN_LDAP_HOSTS**: Set phpLDAPadmin server config. Defaults to :
 
@@ -125,9 +125,9 @@ Environment variable can be set directly by adding the -e argument in the comman
 	docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS="ldap.example.org" \
 	-d osixia/phpldapadmin
 
-Or by setting your own `env.yaml` file as a docker volume to `/etc/env.yaml`
+Or by setting your own `env.yaml` file as a docker volume to `/container/environment/env.yaml`
 
-	docker run -h ldap.example.org -v /data/my-env.yaml:/etc/env.yaml \
+	docker run -h ldap.example.org -v /data/my-env.yaml:/container/environment/env.yaml \
 	-d osixia/openldap
 
 ## Manual build
