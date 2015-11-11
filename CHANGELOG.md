@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.4
+  - Upgrade baseimage: osixia/web-baseimage:0.1.4
+  - Remove listen on http when https is enable
+  - externalise ldap-client config from phpLdapAdmin
+
 ## 0.6.3
   - Upgrade baseimage: osixia/web-baseimage:0.1.3
 

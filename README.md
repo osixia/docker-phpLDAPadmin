@@ -29,7 +29,7 @@ Example script:
     LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
 
     # Run phpLDAPadmin and set ldap host to ldap ip
-    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.2)
+    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.4)
 
     # We get phpLDAPadmin container ip
     PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
@@ -140,7 +140,7 @@ Clone this project :
 Adapt Makefile, set your image NAME and VERSION, for example :
 
 	NAME = osixia/phpldapadmin
-	VERSION = 0.6.2
+	VERSION = 0.6.4
 
 	becomes :
 	NAME = billy-the-king/phpldapadmin
