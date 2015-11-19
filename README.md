@@ -29,7 +29,7 @@ Example script:
     LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
 
     # Run phpLDAPadmin and set ldap host to ldap ip
-    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.2)
+    PHPLDAP_CID=$(docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP -d osixia/phpldapadmin:0.6.4)
 
     # We get phpLDAPadmin container ip
     PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
@@ -112,9 +112,9 @@ Ldap client TLS/LDAPS :
 
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/phpldapadmin/assets/ldap-client/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/phpldapadmin/assets/ldap-client/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/phpldapadmin/assets/ldap-client/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/ldap-client/assets/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/ldap-client/assets/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME**: Set .ldaprc TLS_KEY to /container/service/ldap-client/assets/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME. Defaults to `ldap-client.key`
 
 	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
@@ -140,7 +140,7 @@ Clone this project :
 Adapt Makefile, set your image NAME and VERSION, for example :
 
 	NAME = osixia/phpldapadmin
-	VERSION = 0.6.2
+	VERSION = 0.6.4
 
 	becomes :
 	NAME = billy-the-king/phpldapadmin
