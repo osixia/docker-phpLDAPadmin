@@ -1,22 +1,22 @@
 # Changelog
 
 ## 0.6.4
-  - Upgrade baseimage: osixia/web-baseimage:0.1.4
+  - Upgrade baseimage: web-baseimage:0.1.5
   - Remove listen on http when https is enable
   - externalise ldap-client config from phpLdapAdmin
 
 ## 0.6.3
-  - Upgrade baseimage: osixia/web-baseimage:0.1.3
+  - Upgrade baseimage: web-baseimage:0.1.3
 
 ## 0.6.2
   - Better way to add custom config
 
 ## 0.6.1
-  - Upgrade baseimage: osixia/web-baseimage:0.1.1
+  - Upgrade baseimage: web-baseimage:0.1.1
   - Rename environment variables
 
 ## 0.6.0
-  - Use new baseimage: osixia/light-baseimage
+  - Use new baseimage: light-baseimage
 
 ## 0.5.1
   - Fix #1 (can't activate SSL with own certificates)
