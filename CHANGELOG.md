@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.5
+  - Upgrade baseimage: web-baseimage:0.1.6
+
 ## 0.6.4
   - Upgrade baseimage: web-baseimage:0.1.5
   - Remove listen on http when https is enable
