@@ -11,7 +11,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     /sbin/ssl-helper "/container/service/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "/container/service/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" --ca-crt=/container/service/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME} --gnutls
 
     # ldap client config
-    sed -i "s,TLS_CACERT.*,TLS_CACERT /container/service/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
+    sed -i --follow-symlinks "s,TLS_CACERT.*,TLS_CACERT /container/service/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
     echo "TLS_REQCERT $PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT" >> /etc/ldap/ldap.conf
 
     www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )

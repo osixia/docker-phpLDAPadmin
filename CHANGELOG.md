@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.6
+  - Upgrade baseimage: web-baseimage:0.1.7
+  - Makefile with build no cache
+
 ## 0.6.5
   - Upgrade baseimage: web-baseimage:0.1.6
 
