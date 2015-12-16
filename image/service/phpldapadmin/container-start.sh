@@ -27,8 +27,8 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
     rm -rf /var/www/phpldapadmin_bootstrap
 
-    echo "link /container/service/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
-    ln -s /container/service/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+    echo "copy /container/service/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
+    cp -f /container/service/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
 
     get_salt() {
       salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
