@@ -1,4 +1,4 @@
-FROM osixia/web-baseimage:0.1.6
+FROM osixia/web-baseimage:0.1.7
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.net>
 
 # phpLDAPadmin version

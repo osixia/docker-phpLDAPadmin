@@ -13,7 +13,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
     # add CA certificat config if CA cert exists
     if [ -e "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then
-      sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
+      sed -i --follow-symlinks "s/#SSLCACertificateFile/SSLCACertificateFile/g" /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
     fi
 
     a2ensite phpldapadmin-ssl
@@ -36,11 +36,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
+    sed -i --follow-symlinks "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
 
     append_to_servers() {
       TO_APPEND=$1
-      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
+      sed -i --follow-symlinks "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
     }
 
     print_by_php_type() {
@@ -127,7 +127,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
-    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
+    sed -i --follow-symlinks "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
 
   fi
 
