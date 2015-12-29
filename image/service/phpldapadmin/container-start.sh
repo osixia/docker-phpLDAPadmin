@@ -57,70 +57,45 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     }
 
     # phpLDAPadmin servers config
-    host_infos() {
+    host_info(){
 
       local to_print=$1
-      local infos=(${!2})
 
-      for info in "${infos[@]}"
+      for info in $(complex-bash-env iterate "$2")
       do
-        host_infos_value "$to_print" "$info"
+
+        local isRow=$(complex-bash-env isRow "${!info}")
+
+        if [ $isRow = true ]; then
+          local key=$(complex-bash-env getRowKey "${!info}")
+          local value=$(complex-bash-env getRowValue "${!info}")
+
+          host_info "$to_print'$key'," "${value}"
+
+        else
+          local php_value=$(print_by_php_type $info)
+          append_to_servers "\$servers->setValue($to_print$php_value);"
+        fi
+
       done
     }
 
-    host_infos_value(){
-
-      local to_print=$1
-      local info_key_value=(${!2})
-
-      local key=${!info_key_value[0]}
-      local value=(${!info_key_value[1]})
-
-      local value_of_value_table=(${!value})
-
-      # it's a table of values
-      if [ "${#value[@]}" -gt "1" ]; then
-        host_infos "$to_print'$key'," "${info_key_value[1]}"
-
-      # the value of value is a table
-      elif [ "${#value_of_value_table[@]}" -gt "1" ]; then
-        host_infos_value "$to_print'$key'," "$value"
-
-      # the value contain a not empty variable
-      elif [ -n "${!value}" ]; then
-        local php_value=$(print_by_php_type ${!value})
-        append_to_servers "\$servers->setValue($to_print'$key',$php_value);"
-
-      # it's just a not empty value
-      elif [ -n "$value" ]; then
-        local php_value=$(print_by_php_type $value)
-        append_to_servers "\$servers->setValue($to_print'$key',$php_value);"
-      fi
-    }
-
     # phpLDAPadmin config
-    PHPLDAPADMIN_LDAP_HOSTS=($PHPLDAPADMIN_LDAP_HOSTS)
-    for host in "${PHPLDAPADMIN_LDAP_HOSTS[@]}"
+    for host in $(complex-bash-env iterate "${PHPLDAPADMIN_LDAP_HOSTS}")
     do
 
-      # host var contain a variable name, we access to the variable value and cast it to a table
-      infos=(${!host})
+      isRow=$(complex-bash-env isRow "${!host}")
 
       append_to_servers "\$servers->newServer('ldap_pla');"
 
-      # it's a table of infos
-      if [ "${#infos[@]}" -gt "1" ]; then
-        append_to_servers "\$servers->setValue('server','name','${!infos[0]}');"
-        append_to_servers "\$servers->setValue('server','host','${!infos[0]}');"
-        host_infos "" ${infos[1]}
+      if [ $isRow = true ]; then
+        hostname=$(complex-bash-env getRowKey "${!host}")
+        info=$(complex-bash-env getRowValue "${!host}")
 
-      # it's just a host name
-      # stored in a variable
-      elif [ -n "${!host}" ]; then
-        append_to_servers "\$servers->setValue('server','name','${!host}');"
-        append_to_servers "\$servers->setValue('server','host','${!host}');"
+        append_to_servers "\$servers->setValue('server','name','$hostname');"
+        append_to_servers "\$servers->setValue('server','host','$hostname');"
+        host_info "" "$info"
 
-      # directly
       else
         append_to_servers "\$servers->setValue('server','name','${host}');"
         append_to_servers "\$servers->setValue('server','host','${host}');"
