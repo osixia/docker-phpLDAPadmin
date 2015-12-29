@@ -16,7 +16,7 @@ CMD ["/container/tool/run"]
 # Download, check integrity and unzip phpLDAPadmin to /var/www/phpldapadmin_bootstrap
 RUN apt-get update \
 		&& /container/tool/install-multiple-process-stack \
-		&& /container/tool/install-service-available apache2 php5-fpm ssl-helper-openssl ssl-helper-gnutls \
+		&& /container/tool/install-service-available apache2 php5-fpm cfssl \
 		&& LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 			 patch \
 			 php5-ldap \
