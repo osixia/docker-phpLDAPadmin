@@ -38,9 +38,16 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     get_salt
     sed -i --follow-symlinks "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
 
-    append_to_servers() {
+    append_to_file() {
       TO_APPEND=$1
       sed -i --follow-symlinks "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
+    }
+
+    append_value_to_file() {
+      local TO_PRINT=$1
+      local VALUE=$2
+      local php_value=$(print_by_php_type "$VALUE")
+      append_to_file "\$servers->setValue($TO_PRINT$php_value);"
     }
 
     print_by_php_type() {
@@ -70,11 +77,13 @@ if [ ! -e "$FIRST_START_DONE" ]; then
           local key=$(complex-bash-env getRowKey "${!info}")
           local value=$(complex-bash-env getRowValue "${!info}")
 
-          host_info "$to_print'$key'," "${value}"
-
+          if [ $(complex-bash-env isTable "$value") = true ] || [ $(complex-bash-env isRow "$value") = true ]; then
+            host_info "$to_print'$key'," "${value}"
+          else
+            append_value_to_file "$to_print'$key'," "$value"
+          fi
         else
-          local php_value=$(print_by_php_type $info)
-          append_to_servers "\$servers->setValue($to_print$php_value);"
+          append_value_to_file "$to_print" "$info"
         fi
 
       done
@@ -86,19 +95,19 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
       isRow=$(complex-bash-env isRow "${!host}")
 
-      append_to_servers "\$servers->newServer('ldap_pla');"
+      append_to_file "\$servers->newServer('ldap_pla');"
 
       if [ $isRow = true ]; then
         hostname=$(complex-bash-env getRowKey "${!host}")
         info=$(complex-bash-env getRowValue "${!host}")
 
-        append_to_servers "\$servers->setValue('server','name','$hostname');"
-        append_to_servers "\$servers->setValue('server','host','$hostname');"
+        append_to_file "\$servers->setValue('server','name','$hostname');"
+        append_to_file "\$servers->setValue('server','host','$hostname');"
         host_info "" "$info"
 
       else
-        append_to_servers "\$servers->setValue('server','name','${host}');"
-        append_to_servers "\$servers->setValue('server','host','${host}');"
+        append_to_file "\$servers->setValue('server','name','${host}');"
+        append_to_file "\$servers->setValue('server','host','${host}');"
       fi
     done
 
