@@ -51,7 +51,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     }
 
     print_by_php_type() {
-
       if [ "$1" == "True" ]; then
         echo "true"
       elif [ "$1" == "False" ]; then
@@ -65,15 +64,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
     # phpLDAPadmin servers config
     host_info(){
-
       local to_print=$1
 
       for info in $(complex-bash-env iterate "$2")
       do
-
-        local isRow=$(complex-bash-env isRow "${!info}")
-
-        if [ $isRow = true ]; then
+        if [ $(complex-bash-env isRow "${!info}") = true ]; then
           local key=$(complex-bash-env getRowKey "${!info}")
           local value=$(complex-bash-env getRowValue "${!info}")
 
@@ -83,7 +78,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
             append_value_to_file "$to_print'$key'," "$value"
           fi
         fi
-
       done
     }
 
@@ -91,11 +85,9 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     for host in $(complex-bash-env iterate "${PHPLDAPADMIN_LDAP_HOSTS}")
     do
 
-      isRow=$(complex-bash-env isRow "${!host}")
-
       append_to_file "\$servers->newServer('ldap_pla');"
 
-      if [ $isRow = true ]; then
+      if [ $(complex-bash-env isRow "${!host}") = true ]; then
         hostname=$(complex-bash-env getRowKey "${!host}")
         info=$(complex-bash-env getRowValue "${!host}")
 
@@ -110,7 +102,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     done
 
     sed -i --follow-symlinks "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
-
   fi
 
   # fix file permission
