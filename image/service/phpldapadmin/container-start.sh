@@ -82,8 +82,6 @@ if [ ! -e "$FIRST_START_DONE" ]; then
           else
             append_value_to_file "$to_print'$key'," "$value"
           fi
-        else
-          append_value_to_file "$to_print" "$info"
         fi
 
       done
