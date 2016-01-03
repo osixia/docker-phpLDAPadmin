@@ -17,7 +17,7 @@ CMD ["/container/tool/run"]
 RUN apt-get update \
 		&& /container/tool/install-multiple-process-stack \
 		&& /container/tool/install-service-available apache2 php5-fpm cfssl \
-		&& LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+		&& LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --no-install-recommends \
 			 patch \
 			 php5-ldap \
 			 php5-readline \
