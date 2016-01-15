@@ -25,7 +25,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     fi
 
     ln -s ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
-    a2ensite phpldapadmin-ssl | log-helper info
+    a2ensite phpldapadmin-ssl | log-helper info
 
   #
   # HTTP config
@@ -33,7 +33,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   else
     log-helper info "Set apache2 http config..."
     ln -s ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
-    a2ensite phpldapadmin | log-helper info
+    a2ensite phpldapadmin | log-helper info
   fi
 
   #
