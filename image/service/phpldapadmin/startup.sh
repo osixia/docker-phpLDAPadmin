@@ -1,34 +1,53 @@
 #!/bin/bash -e
 
-FIRST_START_DONE="/etc/docker-phpldapadmin-first-start-done"
+# set -x (bash debug) if log level is trace
+# https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/log-helper
+log-helper level eq trace && set -x
+
+FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
 
 # container first start
 if [ ! -e "$FIRST_START_DONE" ]; then
 
-  # create phpLDAPadmin vhost
+  #
+  # HTTPS config
+  #
   if [ "${PHPLDAPADMIN_HTTPS,,}" == "true" ]; then
 
+    log-helper info "Set apache2 https config..."
+
     # check certificat and key or create it
-    cfssl-helper phpldapadmin "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
+    cfssl-helper phpldapadmin "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
 
     # add CA certificat config if CA cert exists
-    if [ -e "/container/service/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then
-      sed -i --follow-symlinks "s/#SSLCACertificateFile/SSLCACertificateFile/g" /container/service/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
+    if [ -e "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then
+      sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
     fi
 
-    a2ensite phpldapadmin-ssl
+    ln -s ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
+    a2ensite phpldapadmin-ssl | log-helper info
 
+  #
+  # HTTP config
+  #
   else
-    a2ensite phpldapadmin
+    log-helper info "Set apache2 http config..."
+    ln -s ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
+    a2ensite phpldapadmin | log-helper info
   fi
 
+  #
   # phpLDAPadmin directory is empty, we use the bootstrap
+  #
   if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
+
+    log-helper info "Bootstap phpLDAPadmin..."
+
     cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
     rm -rf /var/www/phpldapadmin_bootstrap
 
-    echo "copy /container/service/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
-    cp -f /container/service/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+    log-helper debug  "copy ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
+    cp -f ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
 
     get_salt() {
       salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
@@ -36,11 +55,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i --follow-symlinks "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
+    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
 
     append_to_file() {
       TO_APPEND=$1
-      sed -i --follow-symlinks "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
+      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
     }
 
     append_value_to_file() {
@@ -101,16 +120,16 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
-    sed -i --follow-symlinks "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
+    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
   fi
-
-  # fix file permission
-  find /var/www/ -type d -exec chmod 755 {} \;
-  find /var/www/ -type f -exec chmod 644 {} \;
-  chmod 400 /var/www/phpldapadmin/config/config.php
-  chown www-data:www-data -R /var/www
 
   touch $FIRST_START_DONE
 fi
+
+# fix file permission
+find /var/www/ -type d -exec chmod 755 {} \;
+find /var/www/ -type f -exec chmod 644 {} \;
+chmod 400 /var/www/phpldapadmin/config/config.php
+chown www-data:www-data -R /var/www
 
 exit 0
