@@ -92,7 +92,21 @@ See how to [set your own environment variables](#set-your-own-environment-variab
   $servers->setValue('server','name','ldap3.example.org');
   $servers->setValue('server','host','ldap3.example.org');
   ```
-  All server configuration are available, just add the needed entries, for example:
+  All server configuration are available, just add the needed entries, for example:  
+  ```yaml
+  - ldap.example.org:
+    - server:
+      - tls: true
+      - port: 636
+      - force_may: array('uidNumber','gidNumber','sambaSID')
+    - login:
+      - bind_id: cn=admin,dc=example,dc=org
+      - bind_pass: p0p!
+    - auto_number:
+      - min: 1000
+  - ldap2.example.org
+  - ldap3.example.org
+  ```
 
   See complete list: http://phpldapadmin.sourceforge.net/wiki/index.php/LDAP_server_definitions
 
