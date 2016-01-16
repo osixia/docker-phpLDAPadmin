@@ -15,7 +15,7 @@ ENV PHPLDAPADMIN_SHA1 669fca66c75e24137e106fdd02e3832f81146e23
 # Remove curl
 RUN apt-get update \
 		&& /container/tool/add-multiple-process-stack \
-		&& /container/tool/add-service-available .apache2 .php5-fpm .cfssl \
+		&& /container/tool/add-service-available :apache2 :php5-fpm :cfssl \
 		&& LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --no-install-recommends \
 		   ca-certificates \
 			 curl \
