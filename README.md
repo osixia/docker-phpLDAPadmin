@@ -9,11 +9,11 @@ A docker image to run phpLDAPadmin.
 
 Run a phpLDAPadmin docker image by replacing `ldap.example.com` with your ldap host or IP :
 
-    sudo docker run -p 443:443 \
-               --env PHPLDAPADMIN_LDAP_HOSTS=ldap.example.com \
-               --detach osixia/phpldapadmin:0.6.7
+    docker run -p 6443:443 \
+           --env PHPLDAPADMIN_LDAP_HOSTS=ldap.example.com \
+           --detach osixia/phpldapadmin:0.6.7
 
-That's it :) you can access phpLDAPadmin on [https://localhost](https://localhost)
+That's it :) you can access phpLDAPadmin on [https://localhost:6443](https://localhost:6443)
 
 ## Beginner Guide
 
@@ -135,19 +135,44 @@ Ldap client TLS/LDAPS :
 
 	More information at : http://www.openldap.org/doc/admin24/tls.html (16.2.2. Client Configuration)
 
-### Set environment variables at run time :
+### Set your own environment variables
 
-Environment variable can be set directly by adding the -e argument in the command line, for example :
+#### Use command line argument
+Environment variables can be set by adding the --env argument in the command line, for example:
 
-	docker run -h phpldapadmin.example.org -e PHPLDAPADMIN_LDAP_HOSTS="ldap.example.org" \
-	-d osixia/phpldapadmin
+	docker run --env PHPLDAPADMIN_LDAP_HOSTS="ldap.example.org" \
+	--detach osixia/phpldapadmin:0.6.7
 
-Or by setting your own `env.yaml` file as a docker volume to `/container/environment/env.yaml`
+#### Link environment file
 
-	docker run -h ldap.example.org -v /data/my-env.yaml:/container/environment/env.yaml \
-	-d osixia/openldap
+For example if your environment file is in :  /data/ldap/environment/my-env.yaml
 
-## Manual build
+	docker run --volume /data/ldap/environment/my-env.yaml:/container/environment/01-custom/env.yaml \
+	--detach osixia/phpldapadmin:0.6.7
+
+Take care to link your environment file to `/container/environment/XX-somedir` (with XX < 99 so they will be processed before default environment files) and not  directly to `/container/environment` because this directory contains predefined baseimage environment files to fix container environment (INITRD, LANG, LANGUAGE and LC_CTYPE).
+
+#### Make your own image or extend this image
+
+This is the best solution if you have a private registry. Please refer to the [Advanced User Guide](#advanced-user-guide) just below.
+
+## Advanced User Guide
+
+### Extend osixia/openldap:1.1.0 image
+
+If you need to add your custom TLS certificate, bootstrap config or environment files the easiest way is to extends this image.
+
+Dockerfile example:
+
+    FROM osixia/phpldapadmin:0.6.7
+    MAINTAINER Your Name <your@name.com>
+
+    ADD https-certs /container/service/phpldapadmin/assets/apache2/certs
+    ADD ldap-certs /container/service/ldap-client/assets/certs
+    ADD environment /container/environment/01-custom
+
+
+### Make your own phpLDAPadmin image
 
 Clone this project :
 
@@ -157,11 +182,13 @@ Clone this project :
 Adapt Makefile, set your image NAME and VERSION, for example :
 
 	NAME = osixia/phpldapadmin
-	VERSION = 0.6.4
+	VERSION = 0.6.7
 
 	becomes :
 	NAME = billy-the-king/phpldapadmin
 	VERSION = 0.1.0
+
+Add your custom certificate and environment files...
 
 Build your image :
 
@@ -171,7 +198,7 @@ Run your image :
 
 	docker run -d billy-the-king/phpldapadmin:0.1.0
 
-## Tests
+### Tests
 
 We use **Bats** (Bash Automated Testing System) to test this image:
 
@@ -180,3 +207,22 @@ We use **Bats** (Bash Automated Testing System) to test this image:
 Install Bats, and in this project directory run :
 
 	make test
+
+### Kubernetes
+
+Kubernetes is an open source system for managing containerized applications across multiple hosts, providing basic mechanisms for deployment, maintenance, and scaling of applications.
+
+More information:
+- http://kubernetes.io
+- https://github.com/kubernetes/kubernetes
+
+An osixia-phpldapadmin kubernetes example is available in **example/kubernetes**
+
+### Under the hood: osixia/web-baseimage
+
+This image is based on osixia/web-baseimage.
+More info: https://github.com/osixia/docker-web-baseimage
+
+## Changelog
+
+Please refer to: [CHANGELOG.md](CHANGELOG.md)
