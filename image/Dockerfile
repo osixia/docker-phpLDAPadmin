@@ -8,8 +8,8 @@ ENV PHPLDAPADMIN_SHA1 669fca66c75e24137e106fdd02e3832f81146e23
 # Add multiple process stack to supervise apache2 and php5-fpm
 # sources: https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/add-multiple-process-stack
 #          https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/add-service-available
-#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/.apache2/download.sh
-#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/.php5-fpm/download.sh
+#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:apache2/download.sh
+#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:php5-fpm/download.sh
 # Install ca-certificates, curl and php dependencies
 # Download phpLDAPadmin, check file integrity, and unzip phpLDAPadmin to /var/www/phpldapadmin_bootstrap
 # Remove curl
@@ -38,7 +38,7 @@ RUN /container/tool/install-service \
 		&& apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-		# Add default env variables
+# Add default env variables
 ADD environment /container/environment/99-default
 
 # Set phpLDAPadmin data directory in a data volume
