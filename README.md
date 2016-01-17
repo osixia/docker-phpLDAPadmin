@@ -145,9 +145,9 @@ Environment variables can be set by adding the --env argument in the command lin
 
 #### Link environment file
 
-For example if your environment file is in :  /data/ldap/environment/my-env.yaml
+For example if your environment file is in :  /data/phpLDAPadmin/environment/my-env.yaml
 
-	docker run --volume /data/ldap/environment/my-env.yaml:/container/environment/01-custom/env.yaml \
+	docker run --volume /data/phpLDAPadmin/environment/my-env.yaml:/container/environment/01-custom/env.yaml \
 	--detach osixia/phpldapadmin:0.6.7
 
 Take care to link your environment file to `/container/environment/XX-somedir` (with XX < 99 so they will be processed before default environment files) and not  directly to `/container/environment` because this directory contains predefined baseimage environment files to fix container environment (INITRD, LANG, LANGUAGE and LC_CTYPE).
@@ -158,7 +158,7 @@ This is the best solution if you have a private registry. Please refer to the [A
 
 ## Advanced User Guide
 
-### Extend osixia/openldap:1.1.0 image
+### Extend osixia/phpldapadmin:0.6.7 image
 
 If you need to add your custom TLS certificate, bootstrap config or environment files the easiest way is to extends this image.
 
@@ -216,7 +216,7 @@ More information:
 - http://kubernetes.io
 - https://github.com/kubernetes/kubernetes
 
-An osixia-phpldapadmin kubernetes example is available in **example/kubernetes**
+A kubernetes example is available in **example/kubernetes**
 
 ### Under the hood: osixia/web-baseimage
 
