@@ -15,8 +15,6 @@ Run a phpLDAPadmin docker image by replacing `ldap.example.com` with your ldap h
 
 That's it :) you can access phpLDAPadmin on [https://localhost:6443](https://localhost:6443)
 
-## Beginner Guide
-
 ### OpenLDAP & phpLDAPadmin in 1'
 
 Example script:
@@ -36,6 +34,19 @@ Example script:
     echo "Go to: https://$PHPLDAP_IP"
     echo "Login DN: cn=admin,dc=example,dc=org"
     echo "Password: admin"
+
+
+## Beginner Guide
+
+### Use your own phpLDAPadmin config
+This image comes with a phpLDAPadmin config.php file that can be easily customized via environment variables for a quick bootstrap,
+but setting your own config.php is possible. 2 options:
+
+- Link your config file at run time to `/container/service/phpldapadmin/assets/config.php` :
+
+      docker run -v /data/my-config.php:/container/service/phpldapadmin/assets/config.php --detach osixia:phpldapadmin:0.6.7
+
+- Add your config file by extentending or cloning this image, please refer to the [Advanced User Guide](#advanced-user-guide)
 
 ### HTTPS
 
@@ -60,6 +71,19 @@ Other solutions are available please refer to the [Advanced User Guide](#advance
 Add --env PHPLDAPADMIN_HTTPS=false to the run command :
 
     docker run --env PHPLDAPADMIN_HTTPS=false --detach osixia/phpldapadmin:0.6.7
+
+### Debug
+
+The container default log level is **info**.
+Available levels are: `none`, `error`, `warning`, `info`, `debug` and `trace`.
+
+Example command to run the container in `debug` mode:
+
+	docker run --detach osixia/phpldapadmin:0.6.7 --loglevel debug
+
+See all command line options:
+
+	docker run osixia/phpldapadmin:0.6.7 --help
 
 ## Environment Variables
 
@@ -169,6 +193,7 @@ Dockerfile example:
 
     ADD https-certs /container/service/phpldapadmin/assets/apache2/certs
     ADD ldap-certs /container/service/ldap-client/assets/certs
+    ADD my-config.php /container/service/phpldapadmin/assets/config.php
     ADD environment /container/environment/01-custom
 
 
@@ -188,7 +213,7 @@ Adapt Makefile, set your image NAME and VERSION, for example :
 	NAME = billy-the-king/phpldapadmin
 	VERSION = 0.1.0
 
-Add your custom certificate and environment files...
+Add your custom certificate, environment files, config.php ...
 
 Build your image :
 
