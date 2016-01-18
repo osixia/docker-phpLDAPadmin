@@ -4,8 +4,8 @@
 # https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/log-helper
 log-helper level eq trace && set -x
 
-FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
 
+FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
 # container first start
 if [ ! -e "$FIRST_START_DONE" ]; then
 
@@ -45,9 +45,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
     cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
     rm -rf /var/www/phpldapadmin_bootstrap
-
-    log-helper debug  "copy ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
-    cp -f ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+    rm -f /var/www/phpldapadmin/config/config.php
 
     get_salt() {
       salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
@@ -55,11 +53,11 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" /var/www/phpldapadmin/config/config.php
+    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
 
     append_to_file() {
       TO_APPEND=$1
-      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" /var/www/phpldapadmin/config/config.php
+      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
     }
 
     append_value_to_file() {
@@ -81,7 +79,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     }
 
-    # phpLDAPadmin servers config
+    # phpLDAPadmin host config
     host_info(){
       local to_print=$1
 
@@ -120,16 +118,25 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       fi
     done
 
-    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" /var/www/phpldapadmin/config/config.php
+    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
   fi
 
   touch $FIRST_START_DONE
 fi
 
+# if there is no config file link service config
+if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
+  log-helper debug  "link ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
+  ln -sf ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+fi
+
 # fix file permission
 find /var/www/ -type d -exec chmod 755 {} \;
 find /var/www/ -type f -exec chmod 644 {} \;
-chmod 400 /var/www/phpldapadmin/config/config.php
 chown www-data:www-data -R /var/www
+
+# symlinks special (chown -R don't follow symlinks)
+chown www-data:www-data /var/www/phpldapadmin/config/config.php
+chmod 400 /var/www/phpldapadmin/config/config.php
 
 exit 0
