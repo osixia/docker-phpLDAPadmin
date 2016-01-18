@@ -13,7 +13,7 @@ if [ "${PHPLDAPADMIN_HTTPS,,}" == "true" ]; then
 
   # generate a certificate and key if files don't exists
   # https://github.com/osixia/docker-light-baseimage/blob/stable/image/service-available/:cfssl/assets/tool/cfssl-helper
-  cfssl-helper phpldapadmin "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
+  cfssl-helper ${PHPLDAPADMIN_CFSSL_PREFIX} "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
 
   # add CA certificat config if CA cert exists
   if [ -e "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then

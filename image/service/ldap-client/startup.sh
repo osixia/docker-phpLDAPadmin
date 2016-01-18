@@ -13,7 +13,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   if [ "${PHPLDAPADMIN_LDAP_CLIENT_TLS,,}" == "true" ]; then
 
     # check certificat and key or create it
-    cfssl-helper ldap "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME}"
+    cfssl-helper ${PHPLDAPADMIN_LDAP_CLIENT_CFSSL_PREFIX} "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME}"
 
     # ldap client config
     sed -i --follow-symlinks "s,TLS_CACERT.*,TLS_CACERT ${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME},g" /etc/ldap/ldap.conf
