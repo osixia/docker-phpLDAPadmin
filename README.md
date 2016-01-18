@@ -66,7 +66,7 @@ but setting your own config.php is possible. 2 options:
 
 - Link your config file at run time to `/container/service/phpldapadmin/assets/config.php` :
 
-      docker run -v /data/my-config.php:/container/service/phpldapadmin/assets/config.php --detach osixia:phpldapadmin:0.6.7
+      docker run --volume /data/my-config.php:/container/service/phpldapadmin/assets/config.php --detach osixia:phpldapadmin:0.6.7
 
 - Add your config file by extending or cloning this image, please refer to the [Advanced User Guide](#advanced-user-guide)
 
