@@ -4,37 +4,37 @@
 # https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/log-helper
 log-helper level eq trace && set -x
 
+#
+# HTTPS config
+#
+if [ "${PHPLDAPADMIN_HTTPS,,}" == "true" ]; then
+
+  log-helper info "Set apache2 https config..."
+
+  # generate a certificate and key if files don't exists
+  # https://github.com/osixia/docker-light-baseimage/blob/stable/image/service-available/:cfssl/assets/tool/cfssl-helper
+  cfssl-helper phpldapadmin "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
+
+  # add CA certificat config if CA cert exists
+  if [ -e "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then
+    sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/https.conf
+  fi
+
+  ln -sf ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/https.conf /etc/apache2/sites-available/phpldapadmin.conf
+#
+# HTTP config
+#
+else
+  log-helper info "Set apache2 http config..."
+  ln -sf ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/http.conf /etc/apache2/sites-available/phpldapadmin.conf
+fi
+
+a2ensite phpldapadmin | log-helper debug
+
 
 FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
 # container first start
 if [ ! -e "$FIRST_START_DONE" ]; then
-
-  #
-  # HTTPS config
-  #
-  if [ "${PHPLDAPADMIN_HTTPS,,}" == "true" ]; then
-
-    log-helper info "Set apache2 https config..."
-
-    # check certificat and key or create it
-    cfssl-helper phpldapadmin "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
-
-    # add CA certificat config if CA cert exists
-    if [ -e "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME" ]; then
-      sed -i "s/#SSLCACertificateFile/SSLCACertificateFile/g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf
-    fi
-
-    ln -s ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin-ssl.conf /etc/apache2/sites-available/phpldapadmin-ssl.conf
-    a2ensite phpldapadmin-ssl | log-helper info
-
-  #
-  # HTTP config
-  #
-  else
-    log-helper info "Set apache2 http config..."
-    ln -s ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/phpldapadmin.conf /etc/apache2/sites-available/phpldapadmin.conf
-    a2ensite phpldapadmin | log-helper info
-  fi
 
   #
   # phpLDAPadmin directory is empty, we use the bootstrap
