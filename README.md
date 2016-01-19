@@ -82,8 +82,8 @@ By default HTTPS is enable, a certificate is created with the container hostname
 You can set your custom certificate at run time, by mounting a directory containing those files to **/container/service/phpldapadmin/assets/apache2/certs** and adjust their name with the following environment variables:
 
 	docker run --volume /path/to/certifates:/container/service/phpldapadmin/assets/apache2/certs \
-	--env PHPLDAPADMIN_HTTPS_CRT_FILENAME=my-phpldapadmin.crt \
-	--env PHPLDAPADMIN_HTTPS_KEY_FILENAME=my-phpldapadmin.key \
+	--env PHPLDAPADMIN_HTTPS_CRT_FILENAME=my-cert.crt \
+	--env PHPLDAPADMIN_HTTPS_KEY_FILENAME=my-cert.key \
 	--env PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME=the-ca.crt \
 	--detach osixia/phpldapadmin:0.6.7
 

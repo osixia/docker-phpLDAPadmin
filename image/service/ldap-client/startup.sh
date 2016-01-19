@@ -12,7 +12,8 @@ if [ ! -e "$FIRST_START_DONE" ]; then
 
   if [ "${PHPLDAPADMIN_LDAP_CLIENT_TLS,,}" == "true" ]; then
 
-    # check certificat and key or create it
+    # generate a certificate and key if files don't exists
+    # https://github.com/osixia/docker-light-baseimage/blob/stable/image/service-available/:cfssl/assets/tool/cfssl-helper
     cfssl-helper ${PHPLDAPADMIN_LDAP_CLIENT_CFSSL_PREFIX} "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME}"
 
     # ldap client config
