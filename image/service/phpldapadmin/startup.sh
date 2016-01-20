@@ -31,7 +31,6 @@ fi
 
 a2ensite phpldapadmin | log-helper debug
 
-
 FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
 # container first start
 if [ ! -e "$FIRST_START_DONE" ]; then
@@ -87,34 +86,34 @@ if [ ! -e "$FIRST_START_DONE" ]; then
       do
         if [ $(complex-bash-env isRow "${!info}") = true ]; then
           local key=$(complex-bash-env getRowKey "${!info}")
-          local value=$(complex-bash-env getRowValue "${!info}")
+          local valueVarName=$(complex-bash-env getRowValueVarName "${!info}")
 
-          if [ $(complex-bash-env isTable "$value") = true ] || [ $(complex-bash-env isRow "$value") = true ]; then
-            host_info "$to_print'$key'," "${value}"
+          if [ $(complex-bash-env isTable "${!valueVarName}") = true ] || [ $(complex-bash-env isRow "${!valueVarName}") = true ]; then
+            host_info "$to_print'$key'," "${valueVarName}"
           else
-            append_value_to_file "$to_print'$key'," "$value"
+            append_value_to_file "$to_print'$key'," "${!valueVarName}"
           fi
         fi
       done
     }
 
     # phpLDAPadmin config
-    for host in $(complex-bash-env iterate "${PHPLDAPADMIN_LDAP_HOSTS}")
+    for host in $(complex-bash-env iterate PHPLDAPADMIN_LDAP_HOSTS)
     do
 
       append_to_file "\$servers->newServer('ldap_pla');"
 
       if [ $(complex-bash-env isRow "${!host}") = true ]; then
         hostname=$(complex-bash-env getRowKey "${!host}")
-        info=$(complex-bash-env getRowValue "${!host}")
+        info=$(complex-bash-env getRowValueVarName "${!host}")
 
         append_to_file "\$servers->setValue('server','name','$hostname');"
         append_to_file "\$servers->setValue('server','host','$hostname');"
         host_info "" "$info"
 
       else
-        append_to_file "\$servers->setValue('server','name','${host}');"
-        append_to_file "\$servers->setValue('server','host','${host}');"
+        append_to_file "\$servers->setValue('server','name','${!host}');"
+        append_to_file "\$servers->setValue('server','host','${!host}');"
       fi
     done
 

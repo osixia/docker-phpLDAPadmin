@@ -15,7 +15,7 @@ PHPLDAPADMIN_SERVER_ADMIN: webmaster@example.org
 
 # To use your custom certificat and key 2 options :
 # - add them in service/phpldapadmin/assets/apache2/certs and build the image
-# - or during docker run mount a data volume with thoses files to /container/service/phpldapadmin/assets/apache2/certs
+# - or during docker run mount a data volume with those files to /container/service/phpldapadmin/assets/apache2/certs
 PHPLDAPADMIN_HTTPS: true
 PHPLDAPADMIN_HTTPS_CRT_FILENAME: phpldapadmin.crt
 PHPLDAPADMIN_HTTPS_KEY_FILENAME: phpldapadmin.key
@@ -30,4 +30,4 @@ PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-client.key
 
 # cfssl environment variables prefix
 PHPLDAPADMIN_CFSSL_PREFIX: phpldapadmin # cfssl-helper first search config from PHPLDAPADMIN_CFSSL_* variables, before CFSSL_* variables.
-PHPLDAPADMIN_LDAP_CLIENT_CFSSL_PREFIX: ldap # cfssl-helper first search config from LDAP_CFSSL_* variables, before CFSSL_* variables.
+LDAP_CLIENT_CFSSL_PREFIX: ldap # cfssl-helper first search config from LDAP_CFSSL_* variables, before CFSSL_* variables.

@@ -183,7 +183,7 @@ Ldap client TLS/LDAPS :
 
 Other environment variables:
 - **PHPLDAPADMIN_CFSSL_PREFIX**: cfssl environment variables prefix. Defaults to `phpldapadmin`, cfssl-helper first search config from PHPLDAPADMIN_CFSSL_* variables, before CFSSL_* variables.
-- **PHPLDAPADMIN_LDAP_CLIENT_CFSSL_PREFIX**: cfssl environment variables prefix. Defaults to `ldap`, cfssl-helper first search config from LDAP_CFSSL_* variables, before CFSSL_* variables.
+- **LDAP_CLIENT_CFSSL_PREFIX**: cfssl environment variables prefix. Defaults to `ldap`, cfssl-helper first search config from LDAP_CFSSL_* variables, before CFSSL_* variables.
 
 ### Set your own environment variables
 
