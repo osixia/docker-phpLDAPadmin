@@ -1,6 +1,6 @@
 # osixia/phpldapadmin
 
-[![](https://badge.imagelayers.io/osixia/phpldapadmin:latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest 'Get your own badge on imagelayers.io') | Latest release: 0.6.8 - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
+[![](https://badge.imagelayers.io/osixia/phpldapadmin:latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest 'Get your own badge on imagelayers.io') | Latest release: 0.6.8 - phpLDAPadmin 1.2.3 - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
 
 A docker image to run phpLDAPadmin.
 > [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
@@ -48,12 +48,15 @@ Example script:
     LDAP_CID=$(docker run --hostname ldap.example.org --detach osixia/openldap:1.1.1)
     LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
 
-    # Run phpLDAPadmin and set ldap host to ldap ip
+    # Run phpLDAPadmin and set ldap host to ldap container ip
     PHPLDAP_CID=$(docker run --hostname phpldapadmin.example.org --env PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP --detach osixia/phpldapadmin:0.6.8)
 
     # We get phpLDAPadmin container ip
     PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
 
+		echo "Ldap container IP: $LDAP_IP"
+		echo "phpLDADadmin container IP $PHPLDAP_IP"
+		echo ""
     echo "Go to: https://$PHPLDAP_IP"
     echo "Login DN: cn=admin,dc=example,dc=org"
     echo "Password: admin"
