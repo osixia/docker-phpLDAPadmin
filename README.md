@@ -1,6 +1,13 @@
 # osixia/phpldapadmin
 
-[![](https://badge.imagelayers.io/osixia/phpldapadmin:latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest 'Get your own badge on imagelayers.io') | Latest release: 0.6.8 - phpLDAPadmin 1.2.3 - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/osixia/phpldapadmin.svg)][hub]
+[![Docker Stars](https://img.shields.io/docker/stars/osixia/phpldapadmin.svg)][hub]
+[![Image Size](https://img.shields.io/imagelayers/image-size/osixia/phpldapadmin/latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest)
+[![Image Layers](https://img.shields.io/imagelayers/layers/osixia/phpldapadmin/latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest)
+
+[hub]: https://hub.docker.com/r/osixia/phpldapadmin/
+
+Latest release: 0.6.8 - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
 
 A docker image to run phpLDAPadmin.
 > [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
