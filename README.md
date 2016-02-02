@@ -50,20 +50,12 @@ That's it :) you can access phpLDAPadmin on [https://localhost:6443](https://loc
 Example script:
 
     #!/bin/bash -e
+		docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.1
 
-    # Run a ldap server, save the container id in LDAP_CID and get its IP:
-    LDAP_CID=$(docker run --hostname ldap.example.org --detach osixia/openldap:1.1.1)
-    LDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $LDAP_CID)
+		docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach osixia/phpldapadmin:0.6.8
 
-    # Run phpLDAPadmin and set ldap host to ldap container ip
-    PHPLDAP_CID=$(docker run --hostname phpldapadmin.example.org --env PHPLDAPADMIN_LDAP_HOSTS=$LDAP_IP --detach osixia/phpldapadmin:0.6.8)
+		PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" phpldapadmin-service)
 
-    # We get phpLDAPadmin container ip
-    PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" $PHPLDAP_CID)
-
-		echo "Ldap container IP: $LDAP_IP"
-		echo "phpLDADadmin container IP $PHPLDAP_IP"
-		echo ""
     echo "Go to: https://$PHPLDAP_IP"
     echo "Login DN: cn=admin,dc=example,dc=org"
     echo "Password: admin"
