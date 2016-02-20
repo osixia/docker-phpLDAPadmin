@@ -1,4 +1,4 @@
-FROM osixia/web-baseimage:0.1.8
+FROM osixia/web-baseimage:0.1.9
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.net>
 
 # phpLDAPadmin version
@@ -27,17 +27,17 @@ RUN apt-get update \
 		&& echo "$PHPLDAPADMIN_SHA1 *phpldapadmin.tgz" | sha1sum -c - \
 		&& mkdir -p /var/www/phpldapadmin_bootstrap /var/www/phpldapadmin \
 		&& tar -xzf phpldapadmin.tgz --strip 1 -C /var/www/phpldapadmin_bootstrap \
-		&& apt-get remove -y --purge --auto-remove curl ca-certificates
+		&& apt-get remove -y --purge --auto-remove curl ca-certificates \
+		&& rm phpldapadmin.tgz \
+		&& apt-get clean \
+		&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add service directory to /container/service
 ADD service /container/service
 
-# Use baseimage install-service script and clean all
+# Use baseimage install-service script
 # https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/install-service
-RUN /container/tool/install-service \
-		&& rm phpldapadmin.tgz \
-		&& apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN /container/tool/install-service
 
 # Add default env variables
 ADD environment /container/environment/99-default

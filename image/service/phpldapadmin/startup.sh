@@ -4,6 +4,8 @@
 # https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/log-helper
 log-helper level eq trace && set -x
 
+FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
+
 #
 # HTTPS config
 #
@@ -31,20 +33,23 @@ fi
 
 a2ensite phpldapadmin | log-helper debug
 
-FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
-# container first start
-if [ ! -e "$FIRST_START_DONE" ]; then
+#
+# phpLDAPadmin directory is empty, we use the bootstrap
+#
+if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
 
-  #
-  # phpLDAPadmin directory is empty, we use the bootstrap
-  #
-  if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
+  log-helper info "Bootstap phpLDAPadmin..."
 
-    log-helper info "Bootstap phpLDAPadmin..."
+  cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
+  rm -rf /var/www/phpldapadmin_bootstrap
+  rm -f /var/www/phpldapadmin/config/config.php
+fi
 
-    cp -R /var/www/phpldapadmin_bootstrap/* /var/www/phpldapadmin
-    rm -rf /var/www/phpldapadmin_bootstrap
-    rm -f /var/www/phpldapadmin/config/config.php
+# if there is no config
+if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
+
+  # on container first start customise the container config file
+  if [ ! -e "$FIRST_START_DONE" ]; then
 
     get_salt() {
       salt=$(</dev/urandom tr -dc '1324567890#<>,()*.^@$% =-_~;:/{}[]+!`azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN' | head -c64 | tr -d '\\')
@@ -118,15 +123,13 @@ if [ ! -e "$FIRST_START_DONE" ]; then
     done
 
     sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
+
+    touch $FIRST_START_DONE
   fi
 
-  touch $FIRST_START_DONE
-fi
-
-# if there is no config file link service config
-if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
-  log-helper debug  "link ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
+  log-helper debug "link ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
   ln -sf ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+
 fi
 
 # fix file permission
