@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.9
+  - Upgrade baseimage: web-baseimage:0.1.10
+
 ## 0.6.8
   - Upgrade baseimage: web-baseimage:0.1.9
 
