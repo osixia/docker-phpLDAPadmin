@@ -2,8 +2,6 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/osixia/phpldapadmin.svg)][hub]
 [![Docker Stars](https://img.shields.io/docker/stars/osixia/phpldapadmin.svg)][hub]
-[![Image Size](https://img.shields.io/imagelayers/image-size/osixia/phpldapadmin/latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest)
-[![Image Layers](https://img.shields.io/imagelayers/layers/osixia/phpldapadmin/latest.svg)](https://imagelayers.io/?images=osixia/phpldapadmin:latest)
 
 [hub]: https://hub.docker.com/r/osixia/phpldapadmin/
 
@@ -236,6 +234,9 @@ Dockerfile example:
     ADD my-config.php /container/service/phpldapadmin/assets/config.php
     ADD environment /container/environment/01-custom
 
+
+Warning: if you want to install new packages from debian repositories, this image has a configuration to prevent documentation and locales to be installed. If you need documentation and locales remove the following files :
+**/etc/dpkg/dpkg.cfg.d/01_nodoc** and **/etc/dpkg/dpkg.cfg.d/01_nolocales**
 
 ### Make your own phpLDAPadmin image
 
