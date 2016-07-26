@@ -9,6 +9,7 @@ PHPLDAPADMIN_LDAP_HOSTS:
 
 # Apache
 PHPLDAPADMIN_SERVER_ADMIN: webmaster@example.org
+PHPLDAPADMIN_SERVER_PATH: /phpldapadmin
 
 # Self signed certificat will be generated
 # if PHPLDAPADMIN_HTTPS is set to true and no certificat and key are provided.

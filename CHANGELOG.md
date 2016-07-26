@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.10
+  - Add PHPLDAPADMIN_SERVER_PATH environment variable
+
 ## 0.6.9
   - Upgrade baseimage: web-baseimage:0.1.10
 
