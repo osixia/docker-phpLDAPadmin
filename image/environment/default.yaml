@@ -29,6 +29,6 @@ PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ldap-ca.crt
 PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-client.crt
 PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-client.key
 
-# cfssl environment variables prefix
-PHPLDAPADMIN_CFSSL_PREFIX: phpldapadmin # cfssl-helper first search config from PHPLDAPADMIN_CFSSL_* variables, before CFSSL_* variables.
-LDAP_CLIENT_CFSSL_PREFIX: ldap # cfssl-helper first search config from LDAP_CFSSL_* variables, before CFSSL_* variables.
+# ssl-helper environment variables prefix
+PHPLDAPADMIN_SSL_HELPER_PREFIX: phpldapadmin # ssl-helper first search config from PHPLDAPADMIN_SSL_HELPER_* variables, before SSL_HELPER_* variables.
+LDAP_CLIENT_SSL_HELPER_PREFIX: ldap # ssl-helper first search config from LDAP_SSL_HELPER_* variables, before SSL_HELPER_* variables.
