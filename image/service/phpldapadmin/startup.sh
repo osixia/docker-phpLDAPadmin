@@ -43,7 +43,7 @@ a2ensite phpldapadmin | log-helper debug
 #
 # phpLDAPadmin directory is empty, we use the bootstrap
 #
-if [ ! "$(ls -A /var/www/phpldapadmin)" ]; then
+if [ ! "$(ls -A -I lost+found /var/www/phpldapadmin)" ]; then
 
   log-helper info "Bootstap phpLDAPadmin..."
 
