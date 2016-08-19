@@ -1,0 +1,18 @@
+PHPLDAPADMIN_LDAP_HOSTS:
+  - ldap.example.org:
+    - server:
+      - tls: true
+    - login:
+      - bind_id: cn=admin,dc=example,dc=org
+  - ldap2.example.org
+  - ldap3.example.org
+
+# LDAP client tls config
+PHPLDAPADMIN_LDAP_CLIENT_TLS: true
+PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
+PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ldap-ca.crt
+PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-client.crt
+PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-client.key
+
+# ssl-helper environment variables prefix
+LDAP_CLIENT_SSL_HELPER_PREFIX: ldap # ssl-helper first search config from LDAP_SSL_HELPER_* variables, before SSL_HELPER_* variables.
