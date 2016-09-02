@@ -1,12 +1,3 @@
-PHPLDAPADMIN_LDAP_HOSTS:
-  - ldap.example.org:
-    - server:
-      - tls: true
-    - login:
-      - bind_id: cn=admin,dc=example,dc=org
-  - ldap2.example.org
-  - ldap3.example.org
-
 # Apache
 PHPLDAPADMIN_SERVER_ADMIN: webmaster@example.org
 PHPLDAPADMIN_SERVER_PATH: /phpldapadmin
@@ -22,13 +13,7 @@ PHPLDAPADMIN_HTTPS_CRT_FILENAME: phpldapadmin.crt
 PHPLDAPADMIN_HTTPS_KEY_FILENAME: phpldapadmin.key
 PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME: ca.crt
 
-# LDAP client tls config
-PHPLDAPADMIN_LDAP_CLIENT_TLS: true
-PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
-PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ldap-ca.crt
-PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: ldap-client.crt
-PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: ldap-client.key
+PHPLDAPADMIN_TRUST_PROXY_SSL: false
 
-# cfssl environment variables prefix
-PHPLDAPADMIN_CFSSL_PREFIX: phpldapadmin # cfssl-helper first search config from PHPLDAPADMIN_CFSSL_* variables, before CFSSL_* variables.
-LDAP_CLIENT_CFSSL_PREFIX: ldap # cfssl-helper first search config from LDAP_CFSSL_* variables, before CFSSL_* variables.
+# ssl-helper environment variables prefix
+PHPLDAPADMIN_SSL_HELPER_PREFIX: phpldapadmin # ssl-helper first search config from PHPLDAPADMIN_SSL_HELPER_* variables, before SSL_HELPER_* variables.

@@ -1,4 +1,4 @@
-FROM osixia/web-baseimage:0.1.10
+FROM osixia/web-baseimage:0.1.11
 MAINTAINER Bertrand Gouny <bertrand.gouny@osixia.net>
 
 # phpLDAPadmin version
@@ -10,13 +10,13 @@ ENV PHPLDAPADMIN_SHA1 669fca66c75e24137e106fdd02e3832f81146e23
 #          https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/add-service-available
 #          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:apache2/download.sh
 #          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:php5-fpm/download.sh
-#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:cfssl/download.sh
+#          https://github.com/osixia/light-baseimage/blob/stable/image/service-available/:ssl-tools/download.sh
 # Install ca-certificates, curl and php dependencies
 # Download phpLDAPadmin, check file integrity, and unzip phpLDAPadmin to /var/www/phpldapadmin_bootstrap
 # Remove curl
 RUN apt-get update \
 		&& /container/tool/add-multiple-process-stack \
-		&& /container/tool/add-service-available :apache2 :php5-fpm :cfssl \
+		&& /container/tool/add-service-available :apache2 :php5-fpm :ssl-tools \
 		&& LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --no-install-recommends \
 		   ca-certificates \
 			 curl \
