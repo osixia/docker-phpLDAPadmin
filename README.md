@@ -2,6 +2,7 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/osixia/phpldapadmin.svg)][hub]
 [![Docker Stars](https://img.shields.io/docker/stars/osixia/phpldapadmin.svg)][hub]
+[![](https://images.microbadger.com/badges/image/osixia/phpldapadmin.svg)](http://microbadger.com/images/osixia/phpldapadmin "Get your own image badge on microbadger.com")
 
 [hub]: https://hub.docker.com/r/osixia/phpldapadmin/
 
