@@ -9,7 +9,7 @@
 Latest release: 0.6.11 - phpLDAPadmin 1.2.3 (with php5.5 patch) - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
 
 **A docker image to run phpLDAPadmin.**
-> phpLDAPadmin website: [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
+> [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
 
 - [Quick start](#quick-start)
 	- [OpenLDAP & phpLDAPadmin in 1'](#openldap--phpldapadmin-in-1)
