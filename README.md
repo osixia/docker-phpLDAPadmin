@@ -48,11 +48,10 @@ That's it :) you can access phpLDAPadmin on [https://localhost:6443](https://loc
 Example script:
 
     #!/bin/bash -e
-		docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.1
+    docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.8
+    docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach osixia/phpldapadmin:0.6.12
 
-		docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach osixia/phpldapadmin:0.6.12
-
-		PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" phpldapadmin-service)
+    PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" phpldapadmin-service)
 
     echo "Go to: https://$PHPLDAP_IP"
     echo "Login DN: cn=admin,dc=example,dc=org"
