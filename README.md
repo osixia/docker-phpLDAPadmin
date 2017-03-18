@@ -5,9 +5,9 @@
 
 [hub]: https://hub.docker.com/r/osixia/phpldapadmin/
 
-Latest release: 0.6.12 - phpLDAPadlin 1.2.3 (with php5.5 patch) - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
+Latest release: 0.6.12 - phpLDAPadmin 1.2.3 (with php5.5 patch) - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
 
-A docker image to run phpLDAPadmin.
+**A docker image to run phpLDAPadmin.**
 > [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
 
 - [Quick start](#quick-start)
@@ -21,10 +21,10 @@ A docker image to run phpLDAPadmin.
 	- [Fix docker mounted file problems](#fix-docker-mounted-file-problems)
 	- [Debug](#debug)
 - [Environment Variables](#environment-variables)
-	- [Set your own environment variables](#set-your-own environment-variables)
+	- [Set your own environment variables](#set-your-own-environment-variables)
 		- [Use command line argument](#use-command-line-argument)
 		- [Link environment file](#link-environment-file)
-		- [Make your own image or extend this image](#make-your-own image-or-extend-this-image)
+		- [Make your own image or extend this image](#make-your-own-image-or-extend-this-image)
 - [Advanced User Guide](#advanced-user-guide)
 	- [Extend osixia/phpldapadmin:0.6.12 image](#extend-osixiaphpldapadmin0612-image)
 	- [Make your own phpLDAPadmin image](#make-your-own-phpldapadmin-image)
@@ -48,11 +48,10 @@ That's it :) you can access phpLDAPadmin on [https://localhost:6443](https://loc
 Example script:
 
     #!/bin/bash -e
-		docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.1
+    docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.8
+    docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach osixia/phpldapadmin:0.6.12
 
-		docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach osixia/phpldapadmin:0.6.12
-
-		PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" phpldapadmin-service)
+    PHPLDAP_IP=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" phpldapadmin-service)
 
     echo "Go to: https://$PHPLDAP_IP"
     echo "Login DN: cn=admin,dc=example,dc=org"

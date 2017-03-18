@@ -135,7 +135,7 @@ if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
   fi
 
   log-helper debug "link ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
-  ln -sf ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+  cp -f ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
 
 fi
 

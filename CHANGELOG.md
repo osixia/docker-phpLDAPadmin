@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.6.12
+  - Fixes Parse error: syntax error, unexpected '}' in /container/service/phpldapadmin/assets/config.php on line 68 #23
   - Upgrade baseimage: web-baseimage:1.0.0
 
 ## 0.6.11
