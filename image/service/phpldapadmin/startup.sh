@@ -110,7 +110,7 @@ if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
     }
 
     # phpLDAPadmin config
-    for host in $(complex-bash-env iterate PHPLDAPADMIN_LDAP_HOSTS)
+    for host in $(complex-bash-env iterate $PHPLDAPADMIN_LDAP_HOSTS)
     do
 
       append_to_file "\$servers->newServer('ldap_pla');"
