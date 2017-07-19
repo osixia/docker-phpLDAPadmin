@@ -64,9 +64,9 @@ Example script:
 This image comes with a phpLDAPadmin config.php file that can be easily customized via environment variables for a quick bootstrap,
 but setting your own config.php is possible. 2 options:
 
-- Link your config file at run time to `/container/service/phpldapadmin/assets/config.php` :
+- Link your config file at run time to `/container/service/phpldapadmin/assets/config/config.php` :
 
-            docker run --volume /data/my-config.php:/container/service/phpldapadmin/assets/config.php --detach osixia/phpldapadmin:0.7.0
+            docker run --volume /data/my-config.php:/container/service/phpldapadmin/assets/config/config.php --detach osixia/phpldapadmin:0.7.0
 
 - Add your config file by extending or cloning this image, please refer to the [Advanced User Guide](#advanced-user-guide)
 
@@ -231,7 +231,7 @@ Dockerfile example:
 
     ADD https-certs /container/service/phpldapadmin/assets/apache2/certs
     ADD ldap-certs /container/service/ldap-client/assets/certs
-    ADD my-config.php /container/service/phpldapadmin/assets/config.php
+    ADD my-config.php /container/service/phpldapadmin/assets/config/config.php
     ADD environment /container/environment/01-custom
 
 

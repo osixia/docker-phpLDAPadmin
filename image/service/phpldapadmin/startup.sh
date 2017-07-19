@@ -64,11 +64,11 @@ if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
 
     # phpLDAPadmin cookie secret
     get_salt
-    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
+    sed -i "s|{{ PHPLDAPADMIN_CONFIG_BLOWFISH }}|${salt}|g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config/config.php
 
     append_to_file() {
       TO_APPEND=$1
-      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
+      sed -i "s|{{ PHPLDAPADMIN_SERVERS }}|${TO_APPEND}\n{{ PHPLDAPADMIN_SERVERS }}|g" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config/config.php
     }
 
     append_value_to_file() {
@@ -129,13 +129,13 @@ if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
       fi
     done
 
-    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php
+    sed -i "/{{ PHPLDAPADMIN_SERVERS }}/d" ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config/config.php
 
     touch $FIRST_START_DONE
   fi
 
-  log-helper debug "link ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php to /var/www/phpldapadmin/config/config.php"
-  cp -f ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config.php /var/www/phpldapadmin/config/config.php
+  log-helper debug "link ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config/config.php to /var/www/phpldapadmin/config/config.php"
+  cp -f ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/config/config.php /var/www/phpldapadmin/config/config.php
 
 fi
 
