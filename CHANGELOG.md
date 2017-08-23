@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+  - Optimise apache config
+  - Add opcache config
+
 ## 0.7.0
   - add config.php in config folder
   - Upgrade baseimage: web-baseimage:1.1.0 (debian stretch, php7)
