@@ -185,7 +185,7 @@ Reverse proxy HTTPS :
 
 Ldap client TLS/LDAPS :
 
-- **PHPLDAPADMIN_LDAP_CLIENT_TLS**: Enable ldap client tls config, ldap serveur certificate check and set client  certificate. Defaults to `true`
+- **PHPLDAPADMIN_LDAP_CLIENT_TLS**: Enable ldap client tls config, ldap server certificate check and set client  certificate. Defaults to `true`
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT**: Set ldap.conf TLS_REQCERT. Defaults to `demand`
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME**: Set ldap.conf TLS_CACERT to /container/service/ldap-client/assets/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME. Defaults to `ldap-ca.crt`
 - **PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME**: Set .ldaprc TLS_CERT to /container/service/ldap-client/assets/certs/$PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME. Defaults to `ldap-client.crt`
