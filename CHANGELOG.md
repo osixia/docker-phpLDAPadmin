@@ -3,6 +3,7 @@
 ## 0.7.1
   - Optimise apache config
   - Add opcache config
+  - Upgrade baseimage: web-baseimage:1.1.1
 
 ## 0.7.0
   - add config.php in config folder
