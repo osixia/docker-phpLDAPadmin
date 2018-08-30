@@ -119,8 +119,10 @@ if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
         hostname=$(complex-bash-env getRowKey "${!host}")
         info=$(complex-bash-env getRowValueVarName "${!host}")
 
+        if [ "${PHPLDAPADMIN_LDAP_HOSTS_FRIENDLY,,}" != "true" ]; then
+          append_to_file "\$servers->setValue('server','host','$hostname');"
+        fi
         append_to_file "\$servers->setValue('server','name','$hostname');"
-        append_to_file "\$servers->setValue('server','host','$hostname');"
         host_info "" "$info"
 
       else
