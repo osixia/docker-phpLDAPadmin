@@ -172,6 +172,16 @@ See how to [set your own environment variables](#set-your-own-environment-variab
 
   To convert yaml to python online: http://yaml-online-parser.appspot.com/
 
+  If you would like to skip the display name == hostname element of the above use the **PHPLDAPADMIN_LDAP_HOSTS_FRIENDLY** environmental variable. This then uses the top most name as the display name of the server. You will then need to add host to the yaml within the server section. Note this is a global setting, if you do it for one server, you must do it for all. eg
+  ```yaml
+  - Primary:
+    - server:
+      - host: ldap-master.example.org
+  - Backup:
+    - server:
+      - host: 192.168.0.100
+  ```
+
 Apache :
 - **PHPLDAPADMIN_SERVER_ADMIN**: Server admin email. Defaults to `webmaster@example.org`
 - **PHPLDAPADMIN_SERVER_PATH**: Server path (usefull if behind a reverse proxy). Defaults to `/phpldapadmin`
