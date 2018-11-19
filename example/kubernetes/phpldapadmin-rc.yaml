@@ -25,7 +25,7 @@ spec:
             - containerPort: 443
           env:
             - name: PHPLDAPADMIN_LDAP_HOSTS
-              value: "[{'ldap.example.org': [{'server': [{'tls': 'true'}]}]}]"
+              value: "#PYTHON2BASH:[{'ldap.example.org': [{'server': [{'tls': 'true'}]}]}]"
             - name: PHPLDAPADMIN_SERVER_ADMIN
               value: "webmaster@example.org"
             - name: PHPLDAPADMIN_SERVER_PATH
