@@ -19,7 +19,3 @@ a2enmod deflate expires
 
 # delete unnecessary files
 rm -rf /var/www/phpldapadmin_bootstrap/doc
-
-# apply php5.5 patch
-patch -p1 -d /var/www/phpldapadmin_bootstrap < /container/service/phpldapadmin/assets/php5.5.patch
-sed -i "s/password_hash/password_hash_custom/g" /var/www/phpldapadmin_bootstrap/lib/TemplateRender.php
