@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2019-05-29
+### Changed
+  - phpLDAPadmin 1.2.4
+  - Upgrade baseimage to web-baseimage:1.1.2
+
 ## [0.7.2] - 2018-09-04
 ### Added
   - Ability to sepcifiy different values for ldap 'host' and 'name' #46
@@ -93,6 +98,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.5.0] - 2015-03-03
 New version initial release, no changelog before this sorry.
 
+[0.8.0]: https://github.com/osixia/docker-phpLDAPadmin/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/osixia/docker-phpLDAPadmin/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/osixia/docker-phpLDAPadmin/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/osixia/docker-phpLDAPadmin/compare/v0.6.12...v0.7.0
