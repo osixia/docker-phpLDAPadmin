@@ -13,7 +13,10 @@ load test_helper
   tmp_file="$BATS_TMPDIR/docker-test"
 
   run_image
-  wait_process apache2 php-fpm7.0
+  wait_process apache2 php-fpm7.3
+
+  sleep 5
+
   curl --silent --insecure https://$CONTAINER_IP >> $tmp_file
   run grep -c "Use the menu to the left to navigate" $tmp_file
   rm $tmp_file
@@ -29,7 +32,7 @@ load test_helper
   tmp_file="$BATS_TMPDIR/docker-test"
 
   # we start a new openldap container
-  LDAP_CID=$(docker run -d osixia/openldap:1.1.9)
+  LDAP_CID=$(docker run -d osixia/openldap)
   LDAP_IP=$(get_container_ip_by_cid $LDAP_CID)
 
   # we start the wordpress container and set DB_HOSTS
@@ -38,8 +41,12 @@ load test_helper
   # wait openldap
   wait_process_by_cid $LDAP_CID slapd
 
+  sleep 5
+
   # wait phpLDAPadmin container apache2 service
-  wait_process apache2 php-fpm7.0
+  wait_process apache2 php-fpm7.3
+
+  sleep 5
 
   curl -L --silent --insecure -c $BATS_TMPDIR/cookie.txt https://$CONTAINER_IP >> $tmp_file
 
