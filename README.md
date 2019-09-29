@@ -5,7 +5,7 @@
 
 [hub]: https://hub.docker.com/r/osixia/phpldapadmin/
 
-Latest release: 0.9.0 - phpLDAPadmin 1.2.5 (with php7 patch) - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
+Latest release: 0.9.0 - phpLDAPadmin 1.2.5 - [Changelog](CHANGELOG.md) | [Docker Hub](https://hub.docker.com/r/osixia/phpldapadmin/) 
 
 **A docker image to run phpLDAPadmin.**
 > [phpldapadmin.sourceforge.net](http://phpldapadmin.sourceforge.net)
