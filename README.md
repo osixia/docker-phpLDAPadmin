@@ -191,6 +191,7 @@ HTTPS :
 - **PHPLDAPADMIN_HTTPS_CRT_FILENAME**: Apache ssl certificate filename. Defaults to `phpldapadmin.crt`
 - **PHPLDAPADMIN_HTTPS_KEY_FILENAME**: Apache ssl certificate private key filename. Defaults to `phpldapadmin.key`
 - **PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME**: Apache ssl CA certificate filename. Defaults to `ca.crt`
+- **PHPLDAPADMIN_HTTPS_VERIFY_CLIENT**: Apache client certificate configuration. Possible values are `optional`, `require`, `none`. Defaults to `optional`
 
 Reverse proxy HTTPS :
 - **PHPLDAPADMIN_TRUST_PROXY_SSL**: Set to `true` to trust X-Forwarded-Proto header
