@@ -1,7 +1,7 @@
 FROM osixia/web-baseimage:release-1.2.0-dev
 
 # phpLDAPadmin version
-ARG PHPLDAPADMIN_VERSION=1.2.5
+ARG PHPLDAPADMIN_VERSION=1.2.6.2
 
 # Add multiple process stack to supervise apache2 and php7.3-fpm
 # sources: https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/add-multiple-process-stack
