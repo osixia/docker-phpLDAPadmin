@@ -5,9 +5,9 @@
 # ensure_uid $servicename $intended_uid $intended_gid $filename(s)
 # Taken from OpenLDAP image; should be moved to the shared image at some point, then used by this script and OpenLDAP both
 function	ensure_uid() {
-    servicename=$1
-    intended_uid=${2:-33}
-    intended_gid=${3:-33}
+    local servicename=$1
+    local intended_uid=${2:-33}
+    local intended_gid=${3:-33}
     # Because there are 3 positional params
     shift 3
 
@@ -46,8 +46,6 @@ function	ensure_uid() {
           done
       fi
     fi
-
-    return $SERVICE_UIDGID_CHANGED
 }
 
 # set -x (bash debug) if log level is trace
