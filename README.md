@@ -62,6 +62,9 @@ Example script:
 
 ## Beginner Guide
 
+:warning: | This image uses an anonymous volume (mapped to `/var/www/phpldapadmin`) to persist the resulting configuration transformations. When using this image in a docker compose file, this volume must be removed if the configuration transforms are to be reapplied.
+:---: | :---
+
 ### Use your own phpLDAPadmin config
 This image comes with a phpLDAPadmin config.php file that can be easily customized via environment variables for a quick bootstrap,
 but setting your own config.php is possible. 2 options:
