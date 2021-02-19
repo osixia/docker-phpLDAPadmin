@@ -4,11 +4,11 @@ FROM osixia/web-baseimage:release-1.2.0-dev
 ARG PHPLDAPADMIN_VERSION=1.2.5
 
 # Add multiple process stack to supervise apache2 and php7.3-fpm
-# sources: https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/add-multiple-process-stack
-#          https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/add-service-available
-#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:apache2/download.sh
-#          https://github.com/osixia/docker-web-baseimage/blob/stable/image/service-available/:php7.3-fpm/download.sh
-#          https://github.com/osixia/light-baseimage/blob/stable/image/service-available/:ssl-tools/download.sh
+# sources: https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/add-multiple-process-stack
+#          https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/add-service-available
+#          https://github.com/osixia/docker-web-baseimage/blob/master/image/service-available/:apache2/download.sh
+#          https://github.com/osixia/docker-web-baseimage/blob/master/image/service-available/:php7.3-fpm/download.sh
+#          https://github.com/osixia/light-baseimage/blob/master/image/service-available/:ssl-tools/download.sh
 # Install ca-certificates, curl and php dependencies
 # Download phpLDAPadmin, check file integrity, and unzip phpLDAPadmin to /var/www/phpldapadmin_bootstrap
 # Remove curl
@@ -33,7 +33,7 @@ RUN apt-get update \
 ADD service /container/service
 
 # Use baseimage install-service script
-# https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/install-service
+# https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/install-service
 RUN /container/tool/install-service
 
 # Add default env variables

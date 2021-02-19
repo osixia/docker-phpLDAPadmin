@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # set -x (bash debug) if log level is trace
-# https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/log-helper
+# https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/log-helper
 log-helper level eq trace && set -x
 
 www_data_homedir=$( getent passwd "www-data" | cut -d: -f6 )
@@ -13,7 +13,7 @@ if [ ! -e "$FIRST_START_DONE" ]; then
   if [ "${PHPLDAPADMIN_LDAP_CLIENT_TLS,,}" == "true" ]; then
 
     # generate a certificate and key if files don't exists
-    # https://github.com/osixia/docker-light-baseimage/blob/stable/image/service-available/:ssl-tools/assets/tool/ssl-helper
+    # https://github.com/osixia/docker-light-baseimage/blob/master/image/service-available/:ssl-tools/assets/tool/ssl-helper
     ssl-helper ${LDAP_CLIENT_SSL_HELPER_PREFIX} "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME}" "${CONTAINER_SERVICE_DIR}/ldap-client/assets/certs/${PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME}"
 
     # ldap client config

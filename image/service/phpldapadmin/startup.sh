@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # set -x (bash debug) if log level is trace
-# https://github.com/osixia/docker-light-baseimage/blob/stable/image/tool/log-helper
+# https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/log-helper
 log-helper level eq trace && set -x
 
 FIRST_START_DONE="${CONTAINER_STATE_DIR}/docker-phpldapadmin-first-start-done"
@@ -14,7 +14,7 @@ if [ "${PHPLDAPADMIN_HTTPS,,}" == "true" ]; then
   log-helper info "Set apache2 https config..."
 
   # generate a certificate and key if files don't exists
-  # https://github.com/osixia/docker-light-baseimage/blob/stable/image/service-available/:ssl-tools/assets/tool/ssl-helper
+  # https://github.com/osixia/docker-light-baseimage/blob/master/image/service-available/:ssl-tools/assets/tool/ssl-helper
   ssl-helper ${PHPLDAPADMIN_SSL_HELPER_PREFIX} "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CRT_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_KEY_FILENAME" "${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/apache2/certs/$PHPLDAPADMIN_HTTPS_CA_CRT_FILENAME"
 
   # add CA certificat config if CA cert exists
