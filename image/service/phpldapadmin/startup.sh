@@ -1,5 +1,53 @@
 #!/bin/bash -e
 
+
+
+# ensure_uid $servicename $intended_uid $intended_gid $filename(s)
+# Taken from OpenLDAP image; should be moved to the shared image at some point, then used by this script and OpenLDAP both
+function	ensure_uid() {
+    local servicename=$1
+    local intended_uid=${2:-33}
+    local intended_gid=${3:-33}
+    # Because there are 3 positional params
+    shift 3
+
+    log-helper info "$servicename user and group adjustments"
+
+    log-helper info "get current $servicename uid/gid info inside container"
+    CUR_USER_GID=`id -g $servicename || true`
+    CUR_USER_UID=`id -u $servicename || true`
+
+    SERVICE_UIDGID_CHANGED=false
+    if [ "$intended_uid" != "$CUR_USER_UID" ]; then
+        log-helper info "CUR_USER_UID (${CUR_USER_UID}) does't match intended_uid (${intended_uid}), adjusting..."
+        usermod -o -u "$intended_uid" $servicename
+        SERVICE_UIDGID_CHANGED=true
+    fi
+    if [ "$intended_gid" != "$CUR_USER_GID" ]; then
+        log-helper info "CUR_USER_GID (${CUR_USER_GID}) does't match intended_gid (${intended_gid}), adjusting..."
+        groupmod -o -g "$intended_gid" $servicename
+        SERVICE_UIDGID_CHANGED=true
+    fi
+
+    log-helper info '-------------------------------------'
+    log-helper info '$servicename GID/UID'
+    log-helper info '-------------------------------------'
+    log-helper info "User uid:    $(id -u $servicename)"
+    log-helper info "User gid:    $(id -g $servicename)"
+    log-helper info "uid/gid changed: ${SERVICE_UIDGID_CHANGED}"
+    log-helper info "-------------------------------------"
+
+    # fix file permissions
+    if [ "${DISABLE_CHOWN,,}" == "false" ]; then
+      log-helper info "updating file uid/gid ownership"
+      if [ ! -z "$*" ]; then
+          for file in $*; do
+              chown -R $servicename:$servicename $file
+          done
+      fi
+    fi
+}
+
 # set -x (bash debug) if log level is trace
 # https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/log-helper
 log-helper level eq trace && set -x
@@ -141,12 +189,32 @@ if [ ! -e "/var/www/phpldapadmin/config/config.php" ]; then
 
 fi
 
+PHPLDAPADMIN_WWW_DATA_UID=${PHPLDAPADMIN_WWW_DATA_UID:-33}
+PHPLDAPADMIN_WWW_DATA_GID=${PHPLDAPADMIN_WWW_DATA_GID:-33}
+ensure_uid www-data $PHPLDAPADMIN_WWW_DATA_UID $PHPLDAPADMIN_WWW_DATA_GID /var/www
+
+##### For each template...
+templatedir=${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/templates
+echo "Finding templates"
+find ${CONTAINER_SERVICE_DIR}/phpldapadmin/assets/
+shopt -s nullglob
+for action in creation modification; do
+  for template in ${templatedir}/${action}/*.xml; do
+    basename=`basename $template`
+    log-helper info "Linking $action template for $template"
+    target=/var/www/phpldapadmin/templates/$action/$basename
+    ln -sf $template $target
+    chown $PHPLDAPADMIN_WWW_DATA_UID:$PHPLDAPADMIN_WWW_DATA_GID $target
+  done
+done
+shopt -u nullglob
+
 # fix file permission
 find /var/www/ -type d -exec chmod 755 {} \;
 find /var/www/ -type f -exec chmod 644 {} \;
-chown www-data:www-data -R /var/www
 
 # symlinks special (chown -R don't follow symlinks)
+# Should be redone because of ensure_uid above
 chown www-data:www-data /var/www/phpldapadmin/config/config.php
 chmod 400 /var/www/phpldapadmin/config/config.php
 
