@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: phpldapadmin
-          image: osixia/phpldapadmin:0.9.0
+          image: osixia/phpldapadmin:0.10.0
           volumeMounts:
             - name: phpldapadmin-certs
               mountPath: /container/service/phpldapadmin/assets/apache2/certs
