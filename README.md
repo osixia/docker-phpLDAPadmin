@@ -150,7 +150,7 @@ See how to [set your own environment variables](#set-your-own-environment-variab
   ```
   All server configuration are available, just add the needed entries, for example:  
   ```yaml
-  - ldap.example.org:
+  - ldap-starttls.example.org:
     - server:
       - tls: true
       - port: 636
@@ -160,6 +160,7 @@ See how to [set your own environment variables](#set-your-own-environment-variab
       - bind_pass: p0p!
     - auto_number:
       - min: 1000
+  - ldaps://ldap.example.org
   - ldap2.example.org
   - ldap3.example.org
   ```
@@ -231,6 +232,15 @@ Take care to link your environment file to `/container/environment/XX-somedir` (
 This is the best solution if you have a private registry. Please refer to the [Advanced User Guide](#advanced-user-guide) just below.
 
 ## Advanced User Guide
+
+### Use a public certificate (LetEncrypt)
+
+You need to give your public CA certificates
+
+    docker run -p 6443:443 \
+            --env PHPLDAPADMIN_LDAP_HOSTS=ldap.example.com \
+            --volume /etc/ssl/certs/ca-certificates.crt:/container/service/ldap-client/assets/certs/ldap-ca.crt
+            --detach osixia/phpldapadmin:0.9.0
 
 ### Extend osixia/phpldapadmin:0.9.0 image
 
