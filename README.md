@@ -1,5 +1,15 @@
 # osixia/phpldapadmin
 
+> [!IMPORTANT]
+> **This Docker image is legacy and is no longer the recommended way to deploy phpLDAPadmin.**
+> This repository documents the older `osixia/phpldapadmin` image (phpLDAPadmin 1.2.x).
+> For new deployments, use **phpLDAPadmin 2** instead:
+>
+> - **Official Docker image:** [`phpldapadmin/phpldapadmin`](https://hub.docker.com/r/phpldapadmin/phpldapadmin)
+> - **Kubernetes Helm chart maintained by Osixia:** [`osixia/helm-charts/phpldapadmin`](https://github.com/osixia/helm-charts/tree/main/phpldapadmin)
+>
+> The configuration and commands below apply to the **legacy Osixia image** and are not instructions for the official phpLDAPadmin 2 image.
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/osixia/phpldapadmin.svg)][hub]
 [![Docker Stars](https://img.shields.io/docker/stars/osixia/phpldapadmin.svg)][hub]
 
