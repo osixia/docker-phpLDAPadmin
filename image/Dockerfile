@@ -1,7 +1,7 @@
 FROM osixia/web-baseimage:1.3.2
 
 # phpLDAPadmin version
-ARG PHPLDAPADMIN_VERSION=1.2.6.2
+ARG PHPLDAPADMIN_VERSION=1.2.6.7
 
 # Add multiple process stack to supervise apache2 and php7.3-fpm
 # sources: https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/add-multiple-process-stack
@@ -12,7 +12,9 @@ ARG PHPLDAPADMIN_VERSION=1.2.6.2
 # Install ca-certificates, curl and php dependencies
 # Download phpLDAPadmin, check file integrity, and unzip phpLDAPadmin to /var/www/phpldapadmin_bootstrap
 # Remove curl
-RUN apt-get update \
+RUN true \
+	&& apt-key adv --fetch-keys https://nginx.org/keys/nginx_signing.key \
+	&& apt-get update \
 	&& /container/tool/add-multiple-process-stack \
 	&& /container/tool/add-service-available :apache2 :php7.3-fpm :ssl-tools \
 	&& LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \

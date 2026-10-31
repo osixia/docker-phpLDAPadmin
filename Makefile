@@ -1,5 +1,5 @@
 NAME = osixia/phpldapadmin
-VERSION = 0.10.0
+VERSION = 0.11.0
 
 .PHONY: build build-nocache test tag-latest push push-latest release git-tag-version
 
@@ -7,7 +7,7 @@ build:
 	docker build -t $(NAME):$(VERSION) --rm image
 
 build-nocache:
-	docker build -t $(NAME):$(VERSION) --no-cache --rm image
+	docker build -t $(NAME):$(VERSION) --progress=plain --no-cache --rm image
 
 test:
 	env NAME=$(NAME) VERSION=$(VERSION) bats test/test.bats

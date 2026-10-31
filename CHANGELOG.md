@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2021-02-19
+## Added
+  - phpLDAPadmin version bump to 1.2.6.7
+  - Added debug logging to `build-nocache` Makefile target
+  - Nginx signing keys updated: https://blog.nginx.org/blog/updating-pgp-key-for-nginx-software
+
 ## [0.10.0] - 2021-02-19
 ## Added
   - Multiarch support
